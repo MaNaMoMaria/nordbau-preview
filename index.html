@@ -90,7 +90,7 @@
                 </div>
             </div>
             
-            <!-- 3D Logo Image -->
+            <!-- 3D Logo Section -->
             <div class="relative flex items-center justify-center py-6">
                 <div class="w-full max-w-md flex items-center justify-center relative">
                     <div class="absolute inset-0 bg-brand-orange/20 rounded-full blur-3xl animate-pulse"></div>
@@ -100,7 +100,70 @@
         </div>
     </section>
 
-    <!-- TEAM SECTION -->
+    <!-- BEFORE / AFTER 5-PROJECT GALLERY SECTION -->
+    <section id="gallery" class="py-24 px-6 bg-slate-950/80 border-t border-brand-border relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Verwandlungs-Galerie</h2>
+                    <h3 class="text-3xl font-extrabold text-white">Vorher vs. Nachher – 5 Reale Projekte</h3>
+                </div>
+                <!-- Navigation Controls for Projects -->
+                <div class="flex items-center gap-3 mt-6 md:mt-0">
+                    <button id="btn-prev-project" class="w-12 h-12 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-orange text-white flex items-center justify-center transition-all">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <span id="project-indicator" class="text-sm font-bold text-slate-400 px-3">1 / 5</span>
+                    <button id="btn-next-project" class="w-12 h-12 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-orange text-white flex items-center justify-center transition-all">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project Title Badge -->
+            <div class="mb-4">
+                <span id="project-title" class="text-sm font-bold text-brand-orange bg-brand-orange/10 border border-brand-orange/30 px-4 py-2 rounded-xl inline-block">
+                    Projekt 1: Luxus Badezimmer Modernisierung
+                </span>
+            </div>
+
+            <!-- Interactive Comparison Container -->
+            <div class="max-w-5xl mx-auto">
+                <div id="before-after-slider" class="relative aspect-[16/10] md:aspect-[16/9] rounded-3xl overflow-hidden border-2 border-brand-border select-none shadow-2xl group">
+                    
+                    <!-- AFTER Image -->
+                    <img id="img-after" src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1200" 
+                         alt="Nachher" 
+                         class="absolute inset-0 w-full h-full object-cover">
+                    <span class="absolute top-4 right-4 bg-emerald-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg backdrop-blur z-10">
+                        NACHHER (Fertiggestellt)
+                    </span>
+
+                    <!-- BEFORE Image Container -->
+                    <div id="before-image-container" class="absolute inset-0 w-1/2 overflow-hidden z-20 border-r-2 border-brand-orange shadow-2xl">
+                        <img id="img-before" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200" 
+                             alt="Vorher" 
+                             class="absolute inset-0 w-full h-full object-cover max-w-none">
+                        <span class="absolute top-4 left-4 bg-slate-900/90 text-brand-orange text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg backdrop-blur">
+                            VORHER (Baustelle)
+                        </span>
+                    </div>
+
+                    <!-- Slider Handle Line & Knob -->
+                    <div id="slider-handle" class="absolute top-0 bottom-0 left-1/2 -ml-4 w-8 z-30 cursor-ew-resize flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-brand-orange text-white shadow-xl flex items-center justify-center border-2 border-white group-hover:scale-110 transition-transform">
+                            <i data-lucide="chevrons-left-right" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Range Input Overlay -->
+                    <input type="range" min="0" max="100" value="50" id="slider-range" class="absolute inset-0 w-full h-full opacity-0 z-40 cursor-ew-resize">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM SECTION (با عکس‌های اصلاح‌شده و انیمیشن‌های مدرن و شیک) -->
     <section id="team" class="py-24 px-6 bg-brand-dark border-t border-brand-border">
         <div class="max-w-7xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-16">
@@ -108,51 +171,56 @@
                 <h3 class="text-3xl font-extrabold text-white">Das Team von Nord Bau Centrum</h3>
             </div>
 
-            <!-- Inhaber -->
+            <!-- Inhaber: Kianoosh Nouri -->
             <div class="max-w-sm mx-auto mb-12 group">
-                <div class="bg-gradient-to-b from-brand-orange/20 to-brand-card border-2 border-brand-orange rounded-3xl p-6 text-center shadow-2xl relative transition-all duration-500 group-hover:-translate-y-2">
+                <div class="bg-gradient-to-b from-brand-orange/20 to-brand-card border-2 border-brand-orange/80 rounded-3xl p-6 text-center shadow-2xl relative transition-all duration-500 hover:shadow-orange-500/10 hover:-translate-y-2">
                     <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-orange text-white text-[10px] font-extrabold uppercase px-4 py-1 rounded-full tracking-wider shadow-md">
                         Unternehmensinhaber
                     </span>
+                    <!-- تنظیم دقیق object-position:top برای اینکه سر و صورت کارکنان هرگز زیر کادر نرود -->
                     <div class="aspect-square rounded-2xl bg-slate-900 my-3 overflow-hidden border border-brand-border relative">
-                        <img src="./images/Kianoosh-Nouri.webp" alt="Kianoosh Nouri" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="./images/Kianoosh-Nouri.webp" alt="Kianoosh Nouri" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out">
                     </div>
-                    <h4 class="font-extrabold text-white text-xl">Kianoosh Nouri</h4>
+                    <h4 class="font-extrabold text-white text-xl mt-4">Kianoosh Nouri</h4>
                     <span class="text-xs font-bold text-brand-orange uppercase tracking-wider block mt-1">Inhaber & Geschäftsführer</span>
                 </div>
             </div>
 
-            <!-- Team Members -->
+            <!-- Team Members Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2">
-                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50">
-                        <img src="./images/Amirhossein-Barati.webp" alt="Amirhossein Barati" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <!-- Member 1 -->
+                <div class="bg-brand-card/90 backdrop-blur-md border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2 shadow-xl">
+                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50 relative">
+                        <img src="./images/Amirhossein-Barati.webp" alt="Amirhossein Barati" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out">
                     </div>
-                    <h4 class="font-bold text-white text-base">Amirhossein Barati</h4>
+                    <h4 class="font-bold text-white text-base mt-2">Amirhossein Barati</h4>
                     <span class="text-xs text-slate-400 block mt-1">Projektleitung</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2">
-                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50">
-                        <img src="./images/Robin.webp" alt="Robin" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <!-- Member 2 -->
+                <div class="bg-brand-card/90 backdrop-blur-md border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2 shadow-xl">
+                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50 relative">
+                        <img src="./images/Robin.webp" alt="Robin" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out">
                     </div>
-                    <h4 class="font-bold text-white text-base">Robin</h4>
+                    <h4 class="font-bold text-white text-base mt-2">Robin</h4>
                     <span class="text-xs text-slate-400 block mt-1">Bauleitung & Beratung</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2">
-                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50">
-                        <img src="./images/Mo.-Najafi.webp" alt="Mo. Najafi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <!-- Member 3 -->
+                <div class="bg-brand-card/90 backdrop-blur-md border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2 shadow-xl">
+                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50 relative">
+                        <img src="./images/Mo.-Najafi.webp" alt="Mo. Najafi" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out">
                     </div>
-                    <h4 class="font-bold text-white text-base">Mo. Najafi</h4>
+                    <h4 class="font-bold text-white text-base mt-2">Mo. Najafi</h4>
                     <span class="text-xs text-slate-400 block mt-1">Technischer Experte</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2">
-                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50">
-                        <img src="./images/Mahsa-Ershadi.webp" alt="Mahsa Ershadi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <!-- Member 4 -->
+                <div class="bg-brand-card/90 backdrop-blur-md border border-brand-border rounded-3xl p-5 text-center group hover:border-brand-orange/50 transition-all duration-500 hover:-translate-y-2 shadow-xl">
+                    <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden border border-brand-border/50 relative">
+                        <img src="./images/Mahsa-Ershadi.webp" alt="Mahsa Ershadi" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out">
                     </div>
-                    <h4 class="font-bold text-white text-base">Mahsa Ershadi</h4>
+                    <h4 class="font-bold text-white text-base mt-2">Mahsa Ershadi</h4>
                     <span class="text-xs text-slate-400 block mt-1">Innenarchitektur & Design</span>
                 </div>
             </div>
@@ -169,8 +237,89 @@
         </div>
     </footer>
 
+    <!-- SCRIPTS -->
     <script>
         lucide.createIcons();
+
+        // 5 Projects Gallery Logic with Matching Perspectives
+        const projects = [
+            {
+                title: "Projekt 1: Luxus Badezimmer Modernisierung",
+                before: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1200"
+            },
+            {
+                title: "Projekt 2: Offene Wohnküche & Entkernung",
+                before: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
+            },
+            {
+                title: "Projekt 3: Altbau Komplettsanierung",
+                before: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200"
+            },
+            {
+                title: "Projekt 4: Dachgeschoss Innenausbau",
+                before: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1200"
+            },
+            {
+                title: "Projekt 5: Fassade & Terrassen Neugestaltung",
+                before: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200"
+            }
+        ];
+
+        let currentProjectIndex = 0;
+        const imgBefore = document.getElementById('img-before');
+        const imgAfter = document.getElementById('img-after');
+        const projectTitle = document.getElementById('project-title');
+        const projectIndicator = document.getElementById('project-indicator');
+        const rangeInput = document.getElementById('slider-range');
+        const beforeContainer = document.getElementById('before-image-container');
+        const handle = document.getElementById('slider-handle');
+        const sliderBox = document.getElementById('before-after-slider');
+
+        function updateProject(index) {
+            currentProjectIndex = index;
+            const p = projects[currentProjectIndex];
+            imgBefore.src = p.before;
+            imgAfter.src = p.after;
+            projectTitle.innerText = p.title;
+            projectIndicator.innerText = `${currentProjectIndex + 1} / ${projects.length}`;
+            
+            if(sliderBox && imgBefore) {
+                imgBefore.style.width = `${sliderBox.clientWidth}px`;
+            }
+        }
+
+        document.getElementById('btn-prev-project').addEventListener('click', () => {
+            let nextIdx = currentProjectIndex - 1;
+            if (nextIdx < 0) nextIdx = projects.length - 1;
+            updateProject(nextIdx);
+        });
+
+        document.getElementById('btn-next-project').addEventListener('click', () => {
+            let nextIdx = currentProjectIndex + 1;
+            if (nextIdx >= projects.length) nextIdx = 0;
+            updateProject(nextIdx);
+        });
+
+        if(rangeInput && beforeContainer && handle) {
+            rangeInput.addEventListener('input', (e) => {
+                const value = e.target.value;
+                beforeContainer.style.width = `${value}%`;
+                handle.style.left = `${value}%`;
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            if(sliderBox && imgBefore) {
+                imgBefore.style.width = `${sliderBox.clientWidth}px`;
+            }
+        });
+
+        setTimeout(() => { updateProject(0); }, 200);
     </script>
 </body>
 </html>
