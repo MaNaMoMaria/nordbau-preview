@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de" class="h-full dark">
+<html lang="en" class="h-full dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nord Bau Centrum | 3D Interactive Studio</title>
+    <title>Nord Bau Centrum | Interactive 3D Material Studio</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: { orange: '#F97316', dark: '#070A0F', card: '#0F172A' }
+                        brand: { orange: '#F97316', dark: '#070A0F', card: '#0F172A', border: '#1E293B' }
                     }
                 }
             }
@@ -28,158 +28,327 @@
         body { margin: 0; overflow: hidden; font-family: ui-sans-serif, system-ui, sans-serif; }
         #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 0; }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(249, 115, 22, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 h-full select-none">
+<body class="bg-brand-dark text-slate-100 h-full select-none">
 
+    <!-- 3D Canvas -->
     <div id="canvas-container"></div>
 
-    <div class="relative z-10 flex flex-col justify-between h-full pointer-events-none p-5">
-        <!-- Top Bar -->
+    <!-- UI Overlay Layer -->
+    <div class="relative z-10 flex flex-col justify-between h-full pointer-events-none p-4 md:p-6">
+        
+        <!-- Top Navigation Bar -->
         <div class="flex justify-between items-center w-full pointer-events-auto">
             <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl">
-                <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1.5 mr-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all">
+                <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange hover:text-white">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    <span>Zurück zur Website</span>
+                    <span>Back to Main Site</span>
                 </a>
+                <div class="h-4 w-px bg-slate-700"></div>
                 <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></div>
-                <span class="font-extrabold text-sm text-white">NordBau 3D Studio</span>
+                <span class="font-extrabold text-sm text-white tracking-tight">NordBau 3D Configurator</span>
             </div>
-            
-            <div class="glass-panel px-4 py-2 rounded-2xl text-xs text-slate-300 hidden sm:block">
-                <span>💡 راهنما: روی هر قطعه کلیک کنید تا انتخاب شود</span>
+
+            <!-- View Angle Presets -->
+            <div class="glass-panel px-3 py-1.5 rounded-2xl hidden md:flex items-center gap-2 shadow-xl">
+                <button id="btn-view-iso" class="px-3 py-1 text-xs font-semibold rounded-lg bg-brand-orange text-white">Isometric</button>
+                <button id="btn-view-top" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-400 hover:text-white">Top View</button>
+                <button id="btn-view-front" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-400 hover:text-white">Front View</button>
             </div>
         </div>
 
-        <!-- Center Toolbar (Fully Functional) -->
-        <div class="self-center glass-panel px-3 py-2 rounded-2xl flex items-center gap-2 pointer-events-auto shadow-2xl mb-2 border border-brand-orange/30">
-            <button id="btn-mode-solid" class="p-2.5 rounded-xl text-brand-orange bg-slate-800 transition-all hover:bg-slate-700" title="روشن/خاموش کردن نور پردازی"><i data-lucide="sun" class="w-4 h-4"></i></button>
-            <button id="btn-mode-wireframe" class="p-2.5 rounded-xl text-slate-300 hover:text-white transition-all hover:bg-slate-800" title="حالت شبکه سیمانی (Wireframe)"><i data-lucide="grid" class="w-4 h-4"></i></button>
-            <button id="btn-cutaway" class="p-2.5 rounded-xl text-slate-300 hover:text-emerald-400 transition-all hover:bg-slate-800" title="مخفی کردن قطعه انتخاب شده"><i data-lucide="scissors" class="w-4 h-4"></i></button>
-            <button id="btn-reset" class="p-2.5 rounded-xl text-slate-300 hover:text-white transition-all hover:bg-slate-800" title="بازنشانی دوربین و نمایش همه"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+        <!-- Left Material Control Drawer -->
+        <div class="absolute left-6 top-20 bottom-20 w-80 glass-panel rounded-3xl p-5 pointer-events-auto flex flex-col justify-between shadow-2xl z-20 border border-brand-orange/20 overflow-hidden">
+            <div class="flex flex-col h-full">
+                <!-- Drawer Title -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="palette" class="w-5 h-5 text-brand-orange"></i>
+                        <h3 class="font-extrabold text-sm text-white uppercase tracking-wider">Surface & Tiles Studio</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-5 overflow-y-auto custom-scrollbar pr-1 flex-1">
+                    
+                    <!-- Target Selector -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 block mb-2">1. Select Target Surface</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="target-floor" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-brand-orange text-white border border-brand-orange transition-all">
+                                Floor Tiles
+                            </button>
+                            <button id="target-wall" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition-all">
+                                Main Wall
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Material Preset Catalog -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 block mb-2">2. Tile & Texture Catalog</label>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button onclick="applyPreset('marble')" class="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 hover:border-brand-orange text-left transition-all group">
+                                <div class="w-full h-8 rounded-lg bg-gradient-to-r from-slate-200 to-slate-400 mb-2"></div>
+                                <span class="text-xs font-bold text-slate-200 block group-hover:text-brand-orange">Luxury Marble</span>
+                                <span class="text-[10px] text-slate-500">Carrara White</span>
+                            </button>
+
+                            <button onclick="applyPreset('wood')" class="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 hover:border-brand-orange text-left transition-all group">
+                                <div class="w-full h-8 rounded-lg bg-amber-800 mb-2"></div>
+                                <span class="text-xs font-bold text-slate-200 block group-hover:text-brand-orange">Warm Oak</span>
+                                <span class="text-[10px] text-slate-500">Parquet Wood</span>
+                            </button>
+
+                            <button onclick="applyPreset('dark-tile')" class="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 hover:border-brand-orange text-left transition-all group">
+                                <div class="w-full h-8 rounded-lg bg-slate-800 border border-slate-700 mb-2"></div>
+                                <span class="text-xs font-bold text-slate-200 block group-hover:text-brand-orange">Anthracite Tile</span>
+                                <span class="text-[10px] text-slate-500">60x120 Matte</span>
+                            </button>
+
+                            <button onclick="applyPreset('brand-orange')" class="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 hover:border-brand-orange text-left transition-all group">
+                                <div class="w-full h-8 rounded-lg bg-orange-600 mb-2"></div>
+                                <span class="text-xs font-bold text-slate-200 block group-hover:text-brand-orange">NordBau Accent</span>
+                                <span class="text-[10px] text-slate-500">Signature Orange</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM IMAGE UPLOAD SECTION -->
+                    <div class="bg-gradient-to-br from-slate-900 to-brand-card p-4 rounded-2xl border border-brand-orange/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="upload-cloud" class="w-4 h-4 text-brand-orange"></i>
+                            <label class="text-xs font-bold text-white">Upload Custom Texture</label>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mb-3">Upload your custom tile image or material sample (JPG / PNG):</p>
+                        
+                        <label class="flex items-center justify-center w-full h-20 px-4 transition bg-slate-950 border-2 border-slate-800 border-dashed rounded-xl appearance-none cursor-pointer hover:border-brand-orange focus:outline-none">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="image" class="w-5 h-5 text-slate-400"></i>
+                                <span class="font-semibold text-xs text-slate-300">Choose Image File</span>
+                            </div>
+                            <input type="file" id="texture-upload" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Toolbar -->
+        <div class="self-center glass-panel px-4 py-2 rounded-2xl flex items-center gap-2 pointer-events-auto shadow-2xl mb-2 border border-slate-800">
+            <button id="btn-toggle-light" class="p-2.5 rounded-xl text-brand-orange bg-slate-800/80 hover:bg-slate-700 transition-all" title="Toggle Day/Night Lighting">
+                <i data-lucide="sun" class="w-4 h-4"></i>
+            </button>
+            <button id="btn-toggle-wireframe" class="p-2.5 rounded-xl text-slate-400 hover:text-white transition-all" title="Toggle Structural Wireframe">
+                <i data-lucide="grid" class="w-4 h-4"></i>
+            </button>
+            <div class="w-px h-5 bg-slate-800 mx-1"></div>
+            <button id="btn-reset-view" class="p-2.5 rounded-xl text-slate-400 hover:text-white transition-all" title="Reset Camera">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
         </div>
     </div>
 
-    <!-- 3D Studio Logic -->
+    <!-- 3D Engine Implementation -->
     <script>
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x070a0f);
-        scene.fog = new THREE.FogExp2(0x070a0f, 0.03);
+        scene.fog = new THREE.FogExp2(0x070a0f, 0.025);
 
-        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(12, 9, 14);
+        // Camera Setup
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(10, 8, 12);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.target.set(0, 1, 0);
+        controls.maxPolarAngle = Math.PI / 2 - 0.02; // Prevents camera from going under floor
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // Lighting System
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
 
-        const mainLight = new THREE.DirectionalLight(0xf97316, 1.5);
-        mainLight.position.set(15, 25, 15);
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        mainLight.position.set(12, 18, 10);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
         scene.add(mainLight);
 
-        scene.add(new THREE.GridHelper(30, 30, 0xf97316, 0x1e293b));
+        const accentLight = new THREE.PointLight(0xf97316, 1.5, 12);
+        accentLight.position.set(-2, 3, 2);
+        scene.add(accentLight);
 
-        // BIM Structure Objects
-        const bimObjects = [];
-        const concreteMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4 });
-        const orangePillarMat = new THREE.MeshStandardMaterial({ color: 0xf97316, roughness: 0.2, metalness: 0.3 });
-        const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.4, roughness: 0.1, transmission: 0.9 });
+        // Materials & Geometries (Detailed Bathroom / Interior Studio)
+        const floorGeo = new THREE.PlaneGeometry(10, 10);
+        const wallGeo = new THREE.PlaneGeometry(10, 5);
 
-        function createMesh(geo, mat, pos, name) {
-            const mesh = new THREE.Mesh(geo, mat);
-            mesh.position.set(...pos);
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            mesh.userData = { name: name };
-            scene.add(mesh);
-            bimObjects.push(mesh);
-            return mesh;
+        let activeTarget = 'floor'; // 'floor' or 'wall'
+
+        // Default Materials
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3, metalness: 0.1 });
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+        const furnitureMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 });
+        const mirrorMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.0, metalness: 0.9 });
+
+        // Floor Mesh
+        const floorMesh = new THREE.Mesh(floorGeo, floorMaterial);
+        floorMesh.rotation.x = -Math.PI / 2;
+        floorMesh.receiveShadow = true;
+        scene.add(floorMesh);
+
+        // Back Wall Mesh
+        const backWallMesh = new THREE.Mesh(wallGeo, wallMaterial);
+        backWallMesh.position.set(0, 2.5, -5);
+        backWallMesh.receiveShadow = true;
+        scene.add(backWallMesh);
+
+        // Side Wall Mesh
+        const sideWallMesh = new THREE.Mesh(wallGeo, wallMaterial);
+        sideWallMesh.position.set(-5, 2.5, 0);
+        sideWallMesh.rotation.y = Math.PI / 2;
+        sideWallMesh.receiveShadow = true;
+        scene.add(sideWallMesh);
+
+        // Interior Decor Elements (Vanity Unit & Mirror)
+        const vanityGroup = new THREE.Group();
+        const vanityBase = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 1.4), furnitureMat);
+        vanityBase.position.set(0, 0.5, -4.2);
+        vanityBase.castShadow = true;
+        vanityGroup.add(vanityBase);
+
+        const sinkTop = new THREE.Mesh(new THREE.BoxGeometry(3.1, 0.15, 1.5), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
+        sinkTop.position.set(0, 1.07, -4.2);
+        vanityGroup.add(sinkTop);
+
+        const mirror = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.8, 0.05), mirrorMat);
+        mirror.position.set(0, 2.8, -4.9);
+        vanityGroup.add(mirror);
+
+        scene.add(vanityGroup);
+
+        // Ground Grid Helper
+        const grid = new THREE.GridHelper(10, 10, 0xf97316, 0x1e293b);
+        grid.position.y = 0.01;
+        scene.add(grid);
+
+        // Material Switching Logic
+        function applyPreset(presetType) {
+            let targetMat = activeTarget === 'floor' ? floorMaterial : wallMaterial;
+            
+            // Remove previous map texture if any
+            targetMat.map = null;
+
+            if (presetType === 'marble') {
+                targetMat.color.setHex(0xe2e8f0);
+                targetMat.roughness = 0.1;
+                targetMat.metalness = 0.2;
+            } else if (presetType === 'wood') {
+                targetMat.color.setHex(0x78350f);
+                targetMat.roughness = 0.6;
+                targetMat.metalness = 0.0;
+            } else if (presetType === 'dark-tile') {
+                targetMat.color.setHex(0x1e293b);
+                targetMat.roughness = 0.4;
+                targetMat.metalness = 0.1;
+            } else if (presetType === 'brand-orange') {
+                targetMat.color.setHex(0xf97316);
+                targetMat.roughness = 0.3;
+                targetMat.metalness = 0.2;
+            }
+            targetMat.needsUpdate = true;
         }
 
-        // Foundation
-        createMesh(new THREE.BoxGeometry(8, 0.3, 8), concreteMat, [0, 0, 0], "Fundamentplatte (بتن پایه)");
-        
-        // Columns
-        const colGeo = new THREE.BoxGeometry(0.5, 3.2, 0.5);
-        [[-3.5, 1.6, -3.5], [3.5, 1.6, -3.5], [-3.5, 1.6, 3.5], [3.5, 1.6, 3.5]].forEach((pos, i) => {
-            createMesh(colGeo, orangePillarMat.clone(), pos, `Stütze C0${i+1} (ستون سازه)`);
-        });
+        // Custom Image Texture Upload Logic
+        const textureLoader = new THREE.TextureLoader();
+        document.getElementById('texture-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    textureLoader.load(event.target.result, (texture) => {
+                        texture.wrapS = THREE.RepeatWrapping;
+                        texture.wrapT = THREE.RepeatWrapping;
+                        texture.repeat.set(3, 3); // Tile pattern repeat
 
-        // Walls & Glass
-        createMesh(new THREE.BoxGeometry(7, 3, 0.2), glassMat, [0, 1.5, -3.6], "Glaswand (دیوار شیشه‌ای)");
-        const roof = createMesh(new THREE.BoxGeometry(8, 0.3, 8), concreteMat.clone(), [0, 3.35, 0], "Dachdecke (سقف سازه)");
-
-        // Raycasting for selection
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        let selectedObj = null;
-
-        window.addEventListener('pointerdown', (e) => {
-            if (e.target.closest('button') || e.target.closest('a')) return;
-
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(bimObjects.filter(o => o.visible));
-
-            if (intersects.length > 0) {
-                if (selectedObj && selectedObj.material.emissive) selectedObj.material.emissive.setHex(0x000000);
-                selectedObj = intersects[0].object;
-                if (selectedObj.material.emissive) selectedObj.material.emissive.setHex(0xf97316);
+                        let targetMat = activeTarget === 'floor' ? floorMaterial : wallMaterial;
+                        targetMat.map = texture;
+                        targetMat.color.setHex(0xffffff); // Reset tint
+                        targetMat.needsUpdate = true;
+                    });
+                };
+                reader.readAsDataURL(file);
             }
         });
 
-        // Buttons Logic
-        let lightsOn = true;
-        document.getElementById('btn-mode-solid').addEventListener('click', () => {
-            lightsOn = !lightsOn;
-            mainLight.intensity = lightsOn ? 1.5 : 0.1;
-            ambientLight.intensity = lightsOn ? 0.6 : 0.2;
-            document.getElementById('btn-mode-solid').classList.toggle('text-brand-orange', lightsOn);
+        // Target Switching UI Logic
+        const btnFloor = document.getElementById('target-floor');
+        const btnWall = document.getElementById('target-wall');
+
+        btnFloor.addEventListener('click', () => {
+            activeTarget = 'floor';
+            btnFloor.className = "py-2.5 px-3 rounded-xl text-xs font-bold bg-brand-orange text-white border border-brand-orange transition-all";
+            btnWall.className = "py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition-all";
+        });
+
+        btnWall.addEventListener('click', () => {
+            activeTarget = 'wall';
+            btnWall.className = "py-2.5 px-3 rounded-xl text-xs font-bold bg-brand-orange text-white border border-brand-orange transition-all";
+            btnFloor.className = "py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition-all";
+        });
+
+        // Viewport Angle Buttons
+        document.getElementById('btn-view-iso').addEventListener('click', () => {
+            camera.position.set(10, 8, 12);
+            controls.target.set(0, 1.5, 0);
+        });
+        document.getElementById('btn-view-top').addEventListener('click', () => {
+            camera.position.set(0, 14, 0.1);
+            controls.target.set(0, 0, 0);
+        });
+        document.getElementById('btn-view-front').addEventListener('click', () => {
+            camera.position.set(0, 3, 10);
+            controls.target.set(0, 2, 0);
+        });
+
+        // Toolbar Actions
+        let dayLight = true;
+        document.getElementById('btn-toggle-light').addEventListener('click', () => {
+            dayLight = !dayLight;
+            mainLight.intensity = dayLight ? 1.2 : 0.1;
+            ambientLight.intensity = dayLight ? 0.7 : 0.2;
+            scene.background.setHex(dayLight ? 0x070a0f : 0x020408);
         });
 
         let isWireframe = false;
-        document.getElementById('btn-mode-wireframe').addEventListener('click', () => {
+        document.getElementById('btn-toggle-wireframe').addEventListener('click', () => {
             isWireframe = !isWireframe;
-            bimObjects.forEach(o => o.material.wireframe = isWireframe);
-            document.getElementById('btn-mode-wireframe').classList.toggle('text-brand-orange', isWireframe);
+            floorMaterial.wireframe = isWireframe;
+            wallMaterial.wireframe = isWireframe;
         });
 
-        document.getElementById('btn-cutaway').addEventListener('click', () => {
-            if (selectedObj) {
-                selectedObj.visible = false;
-                selectedObj = null;
-            } else {
-                roof.visible = !roof.visible; // Toggle roof if nothing selected
-            }
+        document.getElementById('btn-reset-view').addEventListener('click', () => {
+            camera.position.set(10, 8, 12);
+            controls.target.set(0, 1.5, 0);
         });
 
-        document.getElementById('btn-reset').addEventListener('click', () => {
-            bimObjects.forEach(o => o.visible = true);
-            camera.position.set(12, 9, 14);
-            controls.target.set(0, 1, 0);
-            if (selectedObj && selectedObj.material.emissive) selectedObj.material.emissive.setHex(0x000000);
-            selectedObj = null;
-        });
-
-        // Loop
+        // Render Loop
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -187,6 +356,7 @@
         }
         animate();
 
+        // Responsive Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
