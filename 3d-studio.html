@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nord Bau Centrum | Unity WebGL & 3D Studio Hub</title>
+    <title>Nord Bau Centrum | Interactive 3D Room & Design Studio</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,188 +19,272 @@
             }
         }
     </script>
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons & Three.js -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #070A0F; font-family: ui-sans-serif, system-ui, sans-serif; }
+        body { margin: 0; overflow: hidden; font-family: ui-sans-serif, system-ui, sans-serif; }
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 0; }
         .glass-panel {
             background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-brand-dark text-slate-100 h-full select-none flex flex-col justify-between overflow-hidden">
+<body class="bg-brand-dark text-slate-100 h-full select-none">
 
-    <!-- Top Engineering Control Bar (کاملاً مستقل از صفحه اصلی) -->
-    <div class="absolute top-4 left-4 right-4 z-30 flex justify-between items-center pointer-events-none">
-        <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl pointer-events-auto border border-brand-orange/30">
-            <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                <span>Zurück zur Website</span>
-            </a>
-            <div class="h-4 w-px bg-slate-700"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-ping"></div>
-            <div>
-                <span class="font-extrabold text-sm text-white block tracking-tight">NordBau Unity WebGL & 3D Hub</span>
-                <span class="text-[10px] text-brand-orange font-mono">Interactive Before/After & BIM Engine</span>
+    <!-- 3D Canvas Viewport -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay Layer -->
+    <div class="relative z-10 flex flex-col justify-between h-full pointer-events-none p-4 md:p-6">
+        
+        <!-- Top Navigation Bar -->
+        <div class="flex justify-between items-center w-full pointer-events-auto">
+            <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl">
+                <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Zurück zur Website</span>
+                </a>
+                <div class="h-4 w-px bg-slate-700"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></div>
+                <div>
+                    <span class="font-extrabold text-sm text-white block tracking-tight">NordBau Interactive 3D Planner</span>
+                    <span class="text-[10px] text-brand-orange font-mono">Custom Room Design & Real-Photo Upload</span>
+                </div>
+            </div>
+
+            <!-- Helper Notice -->
+            <div class="glass-panel px-4 py-2 rounded-2xl text-xs text-slate-300 hidden md:flex items-center gap-2 shadow-xl">
+                <i data-lucide="info" class="w-4 h-4 text-brand-orange"></i>
+                <span>Fügen Sie Möbel hinzu und gestalten Sie den Raum nach Wunsch</span>
             </div>
         </div>
 
-        <!-- Project Switcher for Demo -->
-        <div class="glass-panel p-1.5 rounded-2xl flex items-center gap-1 shadow-2xl pointer-events-auto border border-brand-orange/30">
-            <button onclick="switchView('slider')" id="tab-slider" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow">
-                Vorher / Nachher Vergleich
-            </button>
-            <button onclick="switchView('unity')" id="tab-unity" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all">
-                Unity WebGL Engine
-            </button>
+        <!-- Left Design & Tools Drawer -->
+        <div class="absolute left-6 top-20 bottom-20 w-84 glass-panel rounded-3xl p-5 pointer-events-auto flex flex-col justify-between shadow-2xl z-20 border border-brand-orange/30 overflow-hidden">
+            <div class="flex flex-col h-full">
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="layout" class="w-5 h-5 text-brand-orange"></i>
+                        <h3 class="font-extrabold text-xs text-white uppercase tracking-wider">Raum & Design Studio</h3>
+                    </div>
+                    <span class="text-[10px] font-mono text-brand-orange bg-brand-orange/10 px-2 py-0.5 rounded">Live Planner</span>
+                </div>
+
+                <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1 flex-1 text-xs">
+                    
+                    <!-- Section 1: Upload Client Real Room Photo -->
+                    <div class="bg-gradient-to-br from-brand-orange/10 to-slate-900 p-3.5 rounded-2xl border border-brand-orange/40 space-y-2">
+                        <label class="font-bold text-white block flex items-center gap-1.5">
+                            <i data-lucide="camera" class="w-4 h-4 text-brand-orange"></i> Echten Raum fotografieren / hochladen
+                        </label>
+                        <p class="text-[10px] text-slate-400">Laden Sie ein Foto des Ist-Zustands hoch, um es als Arbeitsgrundlage zu nutzen:</p>
+                        <label class="flex items-center justify-center w-full h-10 px-3 bg-slate-950 border border-slate-800 border-dashed rounded-xl cursor-pointer hover:border-brand-orange transition-all">
+                            <span class="font-semibold text-[11px] text-slate-300">Foto auswählen (JPG/PNG)</span>
+                            <input type="file" id="room-photo-upload" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+
+                    <!-- Section 2: Surface & Material Customizer -->
+                    <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="font-bold text-slate-400 block">1. Oberflächen & Materialien</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setMaterial('wood')" class="p-2 bg-slate-950 hover:bg-slate-800 rounded-xl border border-slate-800 text-left transition-all">
+                                <div class="w-full h-5 rounded bg-amber-800 mb-1"></div>
+                                <span class="font-bold text-slate-200 block text-[11px]">Eichen-Parkett</span>
+                            </button>
+                            <button onclick="setMaterial('marble')" class="p-2 bg-slate-950 hover:bg-slate-800 rounded-xl border border-slate-800 text-left transition-all">
+                                <div class="w-full h-5 rounded bg-slate-200 mb-1"></div>
+                                <span class="font-bold text-slate-200 block text-[11px]">Carrara Marmor</span>
+                            </button>
+                            <button onclick="setMaterial('concrete')" class="p-2 bg-slate-950 hover:bg-slate-800 rounded-xl border border-slate-800 text-left transition-all">
+                                <div class="w-full h-5 rounded bg-slate-600 mb-1"></div>
+                                <span class="font-bold text-slate-200 block text-[11px]">Loft Beton</span>
+                            </button>
+                            <button onclick="setMaterial('brand')" class="p-2 bg-slate-950 hover:bg-slate-800 rounded-xl border border-slate-800 text-left transition-all">
+                                <div class="w-full h-5 rounded bg-orange-600 mb-1"></div>
+                                <span class="font-bold text-slate-200 block text-[11px]">NordBau Akzent</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Add Furniture & Objects -->
+                    <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="font-bold text-slate-400 block">2. Möbel & Ausstattung</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addFurniture('sofa')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="sofa" class="w-4 h-4 text-brand-orange"></i> Sofa
+                            </button>
+                            <button onclick="addFurniture('table')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="table" class="w-4 h-4 text-amber-400"></i> Tisch
+                            </button>
+                            <button onclick="addFurniture('plant')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="flower-2" class="w-4 h-4 text-emerald-400"></i> Pflanze
+                            </button>
+                            <button onclick="addFurniture('lamp')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="lamp" class="w-4 h-4 text-yellow-400"></i> Lampe
+                            </button>
+                        </div>
+                        <button onclick="clearRoom()" class="mt-2 w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-bold transition-all text-center">
+                            Alles zurücksetzen
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Bottom Toolbar -->
+        <div class="self-center glass-panel px-4 py-2 rounded-2xl flex items-center gap-2 pointer-events-auto shadow-2xl mb-2 border border-slate-800">
+            <button onclick="resetCamera()" class="p-2.5 rounded-xl text-slate-400 hover:text-white transition-all" title="Reset View"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+            <div class="w-px h-5 bg-slate-800 mx-1"></div>
+            <a href="index.html#contact" class="px-4 py-2 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-xl text-xs transition-all shadow-lg flex items-center gap-2">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i> Eigenes Projekt anfragen
+            </a>
         </div>
     </div>
 
-    <!-- Main Viewport Area -->
-    <main class="w-full h-full relative z-10 flex items-center justify-center p-4 md:p-8 pt-24">
-        
-        <!-- View 1: Before / After Interactive Suite -->
-        <div id="view-slider" class="w-full max-w-6xl h-[80vh] glass-panel rounded-3xl p-6 border border-brand-border shadow-2xl flex flex-col justify-between relative">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 id="demo-title" class="text-base md:text-lg font-bold text-white">Projekt: Komplettsanierung Altbau-Badezimmer</h2>
-                    <p class="text-xs text-slate-400">Interaktiver Schه‌بیه‌ساز سه‌بعدی قبل و بعد بازسازی برای مشتریان خاص</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="setProject(0)" id="p-btn-0" class="px-3 py-1 rounded-lg text-xs font-bold bg-brand-orange text-white">Bad</button>
-                    <button onclick="setProject(1)" id="p-btn-1" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">Küche</button>
-                    <button onclick="setProject(2)" id="p-btn-2" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">Wohnbereich</button>
-                </div>
-            </div>
-
-            <!-- Comparison Box -->
-            <div id="transformation-box" class="relative flex-1 rounded-2xl overflow-hidden border border-brand-border select-none shadow-2xl group">
-                <img id="img-after" src="" alt="Nachher" class="absolute inset-0 w-full h-full object-cover">
-                <span class="absolute top-4 right-4 bg-emerald-500/90 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg z-10">
-                    NACHHER (Fertiggestellt)
-                </span>
-
-                <div id="before-mask" class="absolute inset-0 w-1/2 overflow-hidden z-20 border-r-2 border-brand-orange shadow-2xl">
-                    <img id="img-before" src="" alt="Vorher" class="absolute inset-0 w-full h-full object-cover max-w-none">
-                    <span class="absolute top-4 left-4 bg-slate-900/90 text-brand-orange text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg">
-                        VORHER (Rohbau)
-                    </span>
-                </div>
-
-                <div id="slider-handle" class="absolute top-0 bottom-0 left-1/2 -ml-4 w-8 z-30 cursor-ew-resize flex items-center justify-center">
-                    <div class="w-8 h-8 rounded-full bg-brand-orange text-white shadow-xl flex items-center justify-center border-2 border-white group-hover:scale-110 transition-transform">
-                        <i data-lucide="chevrons-left-right" class="w-4 h-4"></i>
-                    </div>
-                </div>
-
-                <input type="range" min="0" max="100" value="50" id="range-input" class="absolute inset-0 w-full h-full opacity-0 z-40 cursor-ew-resize">
-            </div>
-        </div>
-
-        <!-- View 2: Unity WebGL Placeholder (آماده برای خروجی یونیتی شما) -->
-        <div id="view-unity" class="w-full max-w-6xl h-[80vh] glass-panel rounded-3xl p-6 border border-brand-orange/30 shadow-2xl hidden flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/10 via-transparent to-slate-950 pointer-events-none"></div>
-            <div class="relative z-10 max-w-lg">
-                <div class="w-16 h-16 rounded-3xl bg-brand-orange/20 border border-brand-orange/50 flex items-center justify-center mx-auto mb-6 text-brand-orange shadow-lg shadow-orange-500/20">
-                    <i data-lucide="box" class="w-8 h-8 animate-bounce"></i>
-                </div>
-                <h3 class="text-2xl font-black text-white mb-3">Unity WebGL Build Integration</h3>
-                <p class="text-slate-300 text-sm mb-6 leading-relaxed">
-                    Hier wird Ihre exportierte Unity WebGL-Applikation eingebunden. Nutzer können direkt im Browser mit Ihren C#-Skripten, UGUI und Shader-Effekten interagieren.
-                </p>
-                <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-400">
-                    &lt;iframe src="./unity-build/index.html" class="w-full h-full"&gt;&lt;/iframe&gt;
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- SCRIPTS -->
+    <!-- 3D Scene Script -->
     <script>
-        lucide.createIcons();
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x070a0f);
 
-        const projects = [
-            {
-                title: "Projekt: Komplettsanierung Altbau-Badezimmer",
-                before: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1400",
-                after: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1400"
-            },
-            {
-                title: "Projekt: Wanddurchbruch & Offene Wohnküche",
-                before: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1400",
-                after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1400"
-            },
-            {
-                title: "Projekt: Dachgeschoss-Ausbau & Parkettverlegung",
-                before: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&q=80&w=1400",
-                after: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1400"
-            }
-        ];
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(10, 8, 12);
 
-        let activeIdx = 0;
-        const imgBefore = document.getElementById('img-before');
-        const imgAfter = document.getElementById('img-after');
-        const demoTitle = document.getElementById('demo-title');
-        const rangeInput = document.getElementById('range-input');
-        const beforeMask = document.getElementById('before-mask');
-        const sliderHandle = document.getElementById('slider-handle');
-        const transformationBox = document.getElementById('transformation-box');
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
 
-        function setProject(idx) {
-            activeIdx = idx;
-            const p = projects[activeIdx];
-            imgBefore.src = p.before;
-            imgAfter.src = p.after;
-            demoTitle.innerText = p.title;
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
 
-            for(let i=0; i<3; i++) {
-                const btn = document.getElementById(`p-btn-${i}`);
-                if(i === idx) {
-                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-brand-orange text-white";
-                } else {
-                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300";
-                }
-            }
-            if(transformationBox && imgBefore) {
-                imgBefore.style.width = `${transformationBox.clientWidth}px`;
-            }
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(10, 20, 10);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        // Room Floor & Walls
+        const floorGeo = new THREE.PlaneGeometry(8, 8);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.4 });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6 });
+        const backWall = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), wallMat);
+        backWall.position.set(0, 2, -4);
+        scene.add(backWall);
+
+        const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), wallMat);
+        leftWall.position.set(-4, 2, 0);
+        leftWall.rotation.y = Math.PI / 2;
+        scene.add(leftWall);
+
+        // Furniture Storage
+        const furnitureObjects = [];
+
+        function setMaterial(type) {
+            if (type === 'wood') floorMat.color.setHex(0x78350f);
+            else if (type === 'marble') floorMat.color.setHex(0xe2e8f0);
+            else if (type === 'concrete') floorMat.color.setHex(0x475569);
+            else if (type === 'brand') floorMat.color.setHex(0xf97316);
+            floorMat.needsUpdate = true;
         }
 
-        rangeInput.addEventListener('input', (e) => {
-            const v = e.target.value;
-            beforeMask.style.width = `${v}%`;
-            sliderHandle.style.left = `${v}%`;
+        function addFurniture(type) {
+            let group = new THREE.Group();
+
+            if (type === 'sofa') {
+                const base = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.5, 0.9), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+                base.position.y = 0.25;
+                const back = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.8, 0.25), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+                back.position.set(0, 0.65, -0.32);
+                group.add(base); group.add(back);
+            } else if (type === 'table') {
+                const top = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.08, 1.0), new THREE.MeshStandardMaterial({ color: 0xb45309 }));
+                top.position.y = 0.8;
+                [[-0.7, 0.4, -0.4], [0.7, 0.4, -0.4], [-0.7, 0.4, 0.4], [0.7, 0.4, 0.4]].forEach(pos => {
+                    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.8), new THREE.MeshStandardMaterial({ color: 0x111827 }));
+                    leg.position.set(...pos);
+                    group.add(leg);
+                });
+                group.add(top);
+            } else if (type === 'plant') {
+                const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.18, 0.5), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
+                pot.position.y = 0.25;
+                const leaves = new THREE.Mesh(new THREE.SphereGeometry(0.4, 12, 12), new THREE.MeshStandardMaterial({ color: 0x10b981 }));
+                leaves.position.y = 0.7;
+                group.add(pot); group.add(leaves);
+            } else if (type === 'lamp') {
+                const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.5), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+                pole.position.y = 1.25;
+                const shade = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.4, 16), new THREE.MeshStandardMaterial({ color: 0xf97316 }));
+                shade.position.y = 2.4;
+                group.add(pole); group.add(shade);
+            }
+
+            group.position.set((Math.random() - 0.5) * 3, 0, (Math.random() - 0.5) * 3);
+            scene.add(group);
+            furnitureObjects.push(group);
+        }
+
+        function clearRoom() {
+            furnitureObjects.forEach(obj => scene.remove(obj));
+            furnitureObjects.length = 0;
+        }
+
+        // Upload custom room photo and map it as background/floor
+        const textureLoader = new THREE.TextureLoader();
+        document.getElementById('room-photo-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    textureLoader.load(evt.target.result, (tex) => {
+                        scene.background = tex; // Set uploaded room photo as 360/environment background
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
-        function switchView(mode) {
-            const vSlider = document.getElementById('view-slider');
-            const vUnity = document.getElementById('view-unity');
-            const tSlider = document.getElementById('tab-slider');
-            const tUnity = document.getElementById('tab-unity');
-
-            if(mode === 'slider') {
-                vSlider.classList.remove('hidden');
-                vUnity.classList.add('hidden');
-                tSlider.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow";
-                tUnity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all";
-            } else {
-                vSlider.classList.add('hidden');
-                vUnity.classList.remove('hidden');
-                tUnity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow";
-                tSlider.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all";
-            }
+        function resetCamera() {
+            camera.position.set(10, 8, 12);
+            controls.target.set(0, 0, 0);
         }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
 
         window.addEventListener('resize', () => {
-            if(transformationBox && imgBefore) {
-                imgBefore.style.width = `${transformationBox.clientWidth}px`;
-            }
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        setTimeout(() => { setProject(0); }, 150);
+        lucide.createIcons();
     </script>
 </body>
 </html>
