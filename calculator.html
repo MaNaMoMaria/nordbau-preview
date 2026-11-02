@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nord Bau Centrum | Smart Sanierung Cost Calculator</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { orange: '#F97316', dark: '#070A0F', card: '#0F172A', border: '#1E293B' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white p-6 md:p-12 overflow-y-auto">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Top Navigation -->
+        <div class="flex justify-between items-center mb-8">
+            <a href="index.html" class="glass-panel px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-brand-orange transition-all text-slate-300 hover:text-white">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Back to Main Site</span>
+            </a>
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-ping"></span>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-brand-orange">NordBau Smart Estimator</span>
+            </div>
+        </div>
+
+        <!-- Main Calculator Card -->
+        <div class="glass-panel p-8 rounded-3xl border border-brand-orange/30 shadow-2xl">
+            <h1 class="text-2xl md:text-3xl font-black text-white mb-2">Interactive Renovation & Cost Estimator</h1>
+            <p class="text-slate-400 text-sm mb-8">Configure your project parameters below to get an instant professional estimate and style recommendation.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Options Form -->
+                <div class="space-y-6">
+                    <!-- Step 1 -->
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-3">1. Select Project Type</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="selectType('bath', 1200)" id="type-bath" class="p-3 rounded-2xl border border-brand-orange bg-brand-orange/10 text-brand-orange text-xs font-bold text-center transition-all">Luxury Bath</button>
+                            <button onclick="selectType('kitchen', 900)" id="type-kitchen" class="p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white">Kitchen</button>
+                            <button onclick="selectType('full', 750)" id="type-full" class="p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white">Full House</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Area Size -->
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">2. Estimated Area (m²): <span id="area-val" class="text-brand-orange font-mono">45</span> m²</label>
+                        <input type="range" min="10" max="200" value="45" id="area-range" class="w-full accent-brand-orange cursor-pointer">
+                    </div>
+
+                    <!-- Step 3: Material Quality -->
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-3">3. Material Standard</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="selectQuality(1.0)" id="q-standard" class="p-3 rounded-2xl border border-brand-orange bg-brand-orange/10 text-white text-xs font-bold text-center transition-all">Standard Modern</button>
+                            <button onclick="selectQuality(1.4)" id="q-luxury" class="p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white">High-End Luxury</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Summary Box -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Project Summary</h3>
+                        <div class="space-y-3 text-sm border-b border-slate-800 pb-4 mb-4">
+                            <div class="flex justify-between"><span class="text-slate-400">Selected Service:</span><span id="res-type" class="font-semibold text-white">Luxury Bath</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Total Area:</span><span id="res-area" class="font-semibold text-white">45 m²</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Est. Duration:</span><span id="res-time" class="font-semibold text-cyan-400">3 - 4 Weeks</span></div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Estimated Investment (Gross):</span>
+                            <span id="res-price" class="text-3xl font-black text-brand-orange">€ 54,000</span>
+                        </div>
+                    </div>
+
+                    <a href="index.html#contact" class="mt-6 w-full py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-xl text-xs text-center transition-all shadow-xl shadow-orange-500/20 block">
+                        Request Official Quotation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let baseRate = 1200;
+        let qualityMultiplier = 1.0;
+        let selectedTypeName = "Luxury Bath";
+
+        const areaRange = document.getElementById('area-range');
+        const areaVal = document.getElementById('area-val');
+        const resArea = document.getElementById('res-area');
+        const resPrice = document.getElementById('res-price');
+        const resType = document.getElementById('res-type');
+        const resTime = document.getElementById('res-time');
+
+        function selectType(type, rate) {
+            baseRate = rate;
+            ['bath', 'kitchen', 'full'].forEach(t => {
+                const btn = document.getElementById(`type-${t}`);
+                if(t === type) {
+                    btn.className = "p-3 rounded-2xl border border-brand-orange bg-brand-orange/10 text-brand-orange text-xs font-bold text-center transition-all";
+                } else {
+                    btn.className = "p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white";
+                }
+            });
+            if(type === 'bath') { selectedTypeName = "Luxury Bath"; resTime.innerText = "3 - 4 Weeks"; }
+            if(type === 'kitchen') { selectedTypeName = "Modern Kitchen"; resTime.innerText = "2 - 3 Weeks"; }
+            if(type === 'full') { selectedTypeName = "Full House Renovation"; resTime.innerText = "8 - 12 Weeks"; }
+            resType.innerText = selectedTypeName;
+            calculate();
+        }
+
+        function selectQuality(multiplier) {
+            qualityMultiplier = multiplier;
+            document.getElementById('q-standard').className = multiplier === 1.0 ? "p-3 rounded-2xl border border-brand-orange bg-brand-orange/10 text-white text-xs font-bold text-center transition-all" : "p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white";
+            document.getElementById('q-luxury').className = multiplier === 1.4 ? "p-3 rounded-2xl border border-brand-orange bg-brand-orange/10 text-white text-xs font-bold text-center transition-all" : "p-3 rounded-2xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold text-center transition-all hover:text-white";
+            calculate();
+        }
+
+        areaRange.addEventListener('input', (e) => {
+            const val = e.target.value;
+            areaVal.innerText = val;
+            resArea.innerText = val + " m²";
+            calculate();
+        });
+
+        function calculate() {
+            const area = parseInt(areaRange.value);
+            const total = Math.round(area * baseRate * qualityMultiplier);
+            resPrice.innerText = "€ " + total.toLocaleString();
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
