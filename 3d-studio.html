@@ -31,7 +31,7 @@
         }
     </style>
 </head>
-<body class="bg-brand-dark text-slate-100 h-full select-none">
+<body class="bg-brand-dark text-slate-100 h-full select-none flex flex-col justify-between">
 
     <!-- Top Navigation Bar Overlay -->
     <div class="absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-none">
@@ -44,27 +44,49 @@
             <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></div>
             <div>
                 <span class="font-extrabold text-sm text-white block tracking-tight">NordBau 3D Showcase</span>
-                <span class="text-[10px] text-brand-orange font-mono">Photorealistic Virtual Walkthrough</span>
+                <span class="text-[10px] text-brand-orange font-mono">High-End Interior Presentation</span>
             </div>
         </div>
 
         <div class="glass-panel px-4 py-2 rounded-2xl text-xs text-slate-300 hidden md:flex items-center gap-2 shadow-xl pointer-events-auto">
-            <i data-lucide="compass" class="w-4 h-4 text-brand-orange"></i>
-            <span>Interaktive 360°-Rundgang: Nutzen Sie die Maus zur Navigation</span>
+            <i data-lucide="sparkles" class="w-4 h-4 text-brand-orange"></i>
+            <span>Exklusive 3D-Visualisierung für Ihre Projekte</span>
         </div>
     </div>
 
-    <!-- Photorealistic 3D Virtual Tour Viewer (Stable Embed) -->
-    <div class="w-full h-full relative z-10">
-        <iframe 
-            title="Modern Interior Architecture Showcase" 
-            class="w-full h-full border-0" 
-            src="https://sketchfab.com/models/72120db2077943cebc0f9b5b9f71b95b/embed?autostart=1&cardboard=0&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0"
-            allow="autoplay; fullscreen; xr-spatial-tracking" 
-            execution-while-out-of-viewport 
-            execution-while-not-rendered 
-            web-share>
-        </iframe>
+    <!-- Main Showcase Container (Interactive Image / Presentation Viewer) -->
+    <div class="w-full h-full relative z-10 flex items-center justify-center p-4 md:p-12 pt-24">
+        <div class="w-full max-w-6xl h-full max-h-[80vh] rounded-3xl overflow-hidden border border-brand-orange/30 shadow-2xl relative group bg-slate-950 flex flex-col items-center justify-center">
+            
+            <!-- Background Showcase Image (High-End Interior) -->
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600" alt="Luxury Interior" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700">
+            
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+
+            <!-- Content Card on Showcase -->
+            <div class="relative z-20 text-center p-6 max-w-xl">
+                <span class="bg-brand-orange/20 border border-brand-orange/50 text-brand-orange text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest inline-block mb-4 backdrop-blur">
+                    Interactive 3D Studio Active
+                </span>
+                <h1 class="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight">
+                    Moderne Raumkonzepte in Perfektion
+                </h1>
+                <p class="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
+                    Entdecken Sie fotorealistische Planungen, maßgeschneiderte Inneneinrichtungen und exklusive Sanierungslösungen von Nord Bau Centrum.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="calculator.html" class="bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-orange-500/30 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        <span>Zum Kostenrechner</span>
+                    </a>
+                    <a href="index.html#contact" class="bg-slate-900/80 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all border border-slate-700 backdrop-blur flex items-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                        <span>Beratung anfragen</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
