@@ -23,24 +23,21 @@
             }
         }
     </script>
-    <!-- Lucide Icons & AOS -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <style>
-        /* 3D Motion & Glow Effects */
+        /* 3D Motion & Pulse Effects */
         @keyframes float3d {
-            0%, 100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-            50% { transform: translateY(-12px) rotateX(4deg) rotateY(-4deg); }
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(3deg); }
         }
         @keyframes glowPulse {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.08); }
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
         }
         .hero-3d-card {
-            animation: float3d 6s ease-in-out infinite;
-            transform-style: preserve-3d;
+            animation: float3d 5s ease-in-out infinite;
         }
         .glow-effect {
             animation: glowPulse 4s infinite ease-in-out;
@@ -50,7 +47,7 @@
 <body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white">
 
     <!-- Header / Navigation -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-xl border-b border-brand-border/60">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/90 backdrop-blur-xl border-b border-brand-border/60">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3 group">
                 <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-orange to-amber-600 p-0.5 shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
@@ -78,14 +75,13 @@
         </div>
     </header>
 
-    <!-- Hero Section (متحرک و مدرن بدون عکس اشتباه پرسنل) -->
+    <!-- Hero Section -->
     <section class="pt-36 pb-20 md:pt-48 px-6 relative overflow-hidden">
-        <!-- Background Ambient Glow -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-orange/15 rounded-full blur-[140px] pointer-events-none glow-effect"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-orange/15 rounded-full blur-[140px] pointer-events-none glow-effect"></div>
 
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div data-aos="fade-right">
-                <div class="inline-flex items-center gap-2 bg-brand-card border border-brand-orange/30 px-4 py-2 rounded-full text-xs text-brand-orange font-semibold mb-6 shadow-inner">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-brand-card border border-brand-orange/30 px-4 py-2 rounded-full text-xs text-brand-orange font-semibold mb-6">
                     <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
                     Premium Qualität in Hamburg & Norderstedt
                 </div>
@@ -108,15 +104,14 @@
                 </div>
             </div>
             
-            <!-- 3D Display Logo & Showcase Card -->
-            <div class="relative flex items-center justify-center" data-aos="fade-left">
-                <div class="hero-3d-card w-full max-w-md aspect-square rounded-3xl bg-gradient-to-b from-brand-card/90 to-brand-dark/90 border border-brand-orange/30 p-8 shadow-2xl backdrop-blur-2xl relative flex flex-col justify-between">
+            <!-- 3D Display Card -->
+            <div class="relative flex items-center justify-center">
+                <div class="hero-3d-card w-full max-w-md aspect-square rounded-3xl bg-gradient-to-b from-brand-card/90 to-brand-dark/90 border border-brand-orange/30 p-8 shadow-2xl backdrop-blur-2xl flex flex-col justify-between">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Nord Bau Centrum</span>
                         <span class="bg-brand-orange/20 text-brand-orange text-[10px] font-extrabold px-3 py-1 rounded-full border border-brand-orange/30">3D Interactive Concept</span>
                     </div>
 
-                    <!-- مرکز کارت: لوگوی بزرگ لوکس -->
                     <div class="my-auto text-center flex flex-col items-center justify-center py-6">
                         <div class="w-32 h-32 mb-4 relative flex items-center justify-center">
                             <div class="absolute inset-0 bg-brand-orange/20 rounded-full blur-xl animate-pulse"></div>
@@ -138,22 +133,22 @@
         </div>
     </section>
 
-    <!-- Stats Section (آمار واقعی شرکت) -->
+    <!-- Stats Section -->
     <section class="py-16 border-y border-brand-border bg-slate-900/40 backdrop-blur">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div data-aos="zoom-in" data-aos-delay="100">
+            <div>
                 <span class="text-3xl md:text-5xl font-black text-brand-orange block mb-2">15+</span>
                 <span class="text-xs md:text-sm text-slate-400 uppercase tracking-widest font-semibold">Jahre Erfahrung</span>
             </div>
-            <div data-aos="zoom-in" data-aos-delay="200">
+            <div>
                 <span class="text-3xl md:text-5xl font-black text-brand-orange block mb-2">83+</span>
                 <span class="text-xs md:text-sm text-slate-400 uppercase tracking-widest font-semibold">Erfolgreiche Projekte</span>
             </div>
-            <div data-aos="zoom-in" data-aos-delay="300">
+            <div>
                 <span class="text-3xl md:text-5xl font-black text-brand-orange block mb-2">1,000+</span>
                 <span class="text-xs md:text-sm text-slate-400 uppercase tracking-widest font-semibold">Zufriedene Kunden</span>
             </div>
-            <div data-aos="zoom-in" data-aos-delay="400">
+            <div>
                 <span class="text-3xl md:text-5xl font-black text-brand-orange block mb-2">35+</span>
                 <span class="text-xs md:text-sm text-slate-400 uppercase tracking-widest font-semibold">Experten im Team</span>
             </div>
@@ -163,13 +158,13 @@
     <!-- Services Grid -->
     <section id="services" class="py-24 px-6 bg-brand-dark">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+            <div class="text-center max-w-2xl mx-auto mb-16">
                 <h2 class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Unsere Bauleistungen</h2>
                 <h3 class="text-3xl font-extrabold text-white">Komplette Sanierung & Innenausbau</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
                     <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-lucide="home" class="w-6 h-6"></i>
                     </div>
@@ -177,7 +172,7 @@
                     <p class="text-sm text-slate-400 leading-relaxed">Nachhaltige Modernisierung für mehr Wohnkomfort und Werterhalt.</p>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
                     <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-lucide="droplet" class="w-6 h-6"></i>
                     </div>
@@ -185,7 +180,7 @@
                     <p class="text-sm text-slate-400 leading-relaxed">Individuelle Badplanung und professionelle Sanitärinstallation.</p>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
                     <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-lucide="layers" class="w-6 h-6"></i>
                     </div>
@@ -196,22 +191,21 @@
         </div>
     </section>
 
-    <!-- Team Section (شامل آقای نوری به عنوان مدیرعامل در جایگاه اول) -->
+    <!-- Team Section (با جایگاه ویژه آقای نوری) -->
     <section id="team" class="py-24 px-6 bg-brand-dark border-t border-brand-border">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+            <div class="text-center max-w-2xl mx-auto mb-16">
                 <h2 class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Führung & Experten</h2>
                 <h3 class="text-3xl font-extrabold text-white">Das Team von Nord Bau Centrum</h3>
             </div>
 
             <!-- جایگاه ویژه رئیس شرکت (آقای امیر نوری) -->
-            <div class="max-w-sm mx-auto mb-12" data-aos="zoom-in">
+            <div class="max-w-sm mx-auto mb-12">
                 <div class="bg-gradient-to-b from-brand-orange/20 to-brand-card border-2 border-brand-orange rounded-3xl p-6 text-center shadow-2xl relative">
                     <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-orange text-white text-[10px] font-extrabold uppercase px-4 py-1 rounded-full tracking-wider shadow-md">
                         Unternehmensinhaber
                     </span>
                     <div class="aspect-square rounded-2xl bg-slate-900 my-3 overflow-hidden border border-brand-border">
-                        <!-- تصویر آقای امیر نوری (در صورت نداشتن فایل اختصاصی، از تصویر مدیریت استفاده شده) -->
                         <img src="images/Amirhossein-Barati.webp" alt="Amir Nouri" class="w-full h-full object-cover">
                     </div>
                     <h4 class="font-extrabold text-white text-lg">Amir Nouri</h4>
@@ -221,7 +215,7 @@
 
             <!-- پرسنل دیگر شرکت -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group">
                     <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden">
                         <img src="images/Robin.webp" alt="Robin" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -229,7 +223,7 @@
                     <span class="text-xs text-slate-400 block mt-1">Bauleitung & Beratung</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group">
                     <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden">
                         <img src="images/Mo.-Najafi.webp" alt="Mo. Najafi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -237,7 +231,7 @@
                     <span class="text-xs text-slate-400 block mt-1">Technischer Experte</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group">
                     <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden">
                         <img src="images/Mahsa-Ershadi.webp" alt="Mahsa Ershadi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -245,7 +239,7 @@
                     <span class="text-xs text-slate-400 block mt-1">Innenarchitektur & Design</span>
                 </div>
 
-                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group" data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-brand-card border border-brand-border rounded-3xl p-5 text-center group">
                     <div class="aspect-square rounded-2xl bg-slate-900 mb-4 overflow-hidden">
                         <img src="images/Kianoosh-Nouri.webp" alt="Kianoosh Nouri" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -259,7 +253,7 @@
     <!-- Location & Google Maps -->
     <section class="py-16 px-6 bg-brand-card/30 border-t border-brand-border">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div data-aos="fade-right">
+            <div>
                 <span class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">Standort Norderstedt</span>
                 <h3 class="text-2xl font-bold text-white mb-4">Besuchen Sie unser Büro</h3>
                 <p class="text-slate-400 text-sm mb-6 leading-relaxed">
@@ -282,9 +276,60 @@
                 </a>
             </div>
 
-            <div class="rounded-3xl border border-brand-border overflow-hidden bg-slate-900 aspect-video relative" data-aos="fade-left">
+            <div class="rounded-3xl border border-brand-border overflow-hidden bg-slate-900 aspect-video relative">
                 <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" alt="Map Location" class="w-full h-full object-cover opacity-60">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
                     <span class="text-xs text-slate-300 flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-                        DSGVO-konforme Stand
+                        DSGVO-konforme Standorteinbindung
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Impressum -->
+    <footer id="contact" class="bg-black border-t border-brand-border pt-16 pb-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <img src="images/logo.webp" alt="Logo" class="w-8 h-8 object-contain">
+                    <span class="font-bold text-lg">Nord Bau Centrum</span>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">
+                    Ihr Partner für erstklassigen Innenausbau und Sanierung im Großraum Hamburg und Norderstedt[cite: 5].
+                </p>
+                <div class="text-sm text-slate-300 space-y-1">
+                    <p>Berliner Allee 38, 22850 Norderstedt</p>[cite: 5]
+                    <p>Telefon: +49 176 77448877</p>[cite: 5]
+                    <p>E-Mail: info@nordbau-centrum.de</p>[cite: 5]
+                </div>
+            </div>
+
+            <div class="bg-brand-card border border-brand-border p-6 rounded-3xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider">Rechtliche Hinweise (Impressum)</h4>
+                    <span class="bg-emerald-500/10 text-emerald-400 text-[10px] px-2.5 py-1 rounded-full font-semibold">DSGVO Konform</span>
+                </div>
+                <div class="text-xs text-slate-400 space-y-2 leading-relaxed">
+                    <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+                    <p>Nord Bau Centrum<br>Inhaber: Amir Nouri<br>Berliner Allee 38, 22850 Norderstedt</p>[cite: 5]
+                    <p><strong>Kontakt:</strong> Telefon: 004917677448877 | E-Mail: info@nordbau-centrum.de</p>[cite: 5]
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-brand-border/50 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500">
+            <p>&copy; 2026 Nord Bau Centrum. Alle Rechte vorbehalten.</p>
+            <div>
+                <span>Optimiert durch M. Mortazavi</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons Script -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
