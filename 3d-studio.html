@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nord Bau Centrum | Custom 3D Transformation Studio</title>
+    <title>Nord Bau Centrum | Unity WebGL & 3D Studio Hub</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,178 +23,184 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; background-color: #070A0F; font-family: ui-sans-serif, system-ui, sans-serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #070A0F; font-family: ui-sans-serif, system-ui, sans-serif; }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
     </style>
 </head>
-<body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white flex flex-col justify-between">
+<body class="bg-brand-dark text-slate-100 h-full select-none flex flex-col justify-between overflow-hidden">
 
-    <!-- Top Navigation Bar -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/90 backdrop-blur-xl border-b border-brand-border/60">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-orange to-amber-600 p-0.5 shadow-lg shadow-orange-500/20">
-                    <div class="w-full h-full bg-brand-card rounded-[14px] p-1.5 flex items-center justify-center">
-                        <img src="./images/logo.webp" alt="Logo" class="w-full h-full object-contain">
-                    </div>
-                </div>
-                <div>
-                    <span class="font-extrabold text-sm tracking-tight block text-white">Nord Bau Centrum</span>
-                    <span class="text-[9px] text-brand-orange font-bold uppercase tracking-widest block">Custom 3D Add-On Studio</span>
-                </div>
+    <!-- Top Engineering Control Bar (کاملاً مستقل از صفحه اصلی) -->
+    <div class="absolute top-4 left-4 right-4 z-30 flex justify-between items-center pointer-events-none">
+        <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl pointer-events-auto border border-brand-orange/30">
+            <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Zurück zur Website</span>
             </a>
-            
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2 bg-brand-card/80 border border-brand-orange/30 px-3.5 py-1.5 rounded-full text-xs text-brand-orange">
-                    <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
-                    <span>Client Custom Add-On Demo</span>
-                </div>
-                <a href="index.html" class="glass-panel px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 transition-all">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    <span>Zurück zur Website</span>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="pt-28 pb-16 px-6 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center">
-        
-        <!-- Pitch Banner for Employer -->
-        <div class="mb-8 p-6 rounded-3xl bg-gradient-to-r from-brand-card via-slate-900 to-brand-card border border-brand-orange/30 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="h-4 w-px bg-slate-700"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-ping"></div>
             <div>
-                <span class="text-xs font-extrabold text-brand-orange uppercase tracking-widest block mb-1">Business Value Proposition</span>
-                <h2 class="text-xl md:text-2xl font-black text-white">Exklusive 3D-Vorher/Nachher Modellierung als Zusatzservice</h2>
-                <p class="text-slate-400 text-xs md:text-sm mt-1 max-w-2xl leading-relaxed">
-                    Testen Sie nachfolgend die interaktive Live-Demo. Dieses System kann für zukünftige Kundenprojekte von Nord Bau Centrum als kostenpflichtiges Add-on (Spezial-Modellierung nach Aufmaß) angeboten werden.
-                </p>
+                <span class="font-extrabold text-sm text-white block tracking-tight">NordBau Unity WebGL & 3D Hub</span>
+                <span class="text-[10px] text-brand-orange font-mono">Interactive Before/After & BIM Engine</span>
             </div>
-            <a href="index.html#contact" class="bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 py-3.5 rounded-2xl text-xs transition-all shadow-xl shadow-orange-500/20 whitespace-nowrap flex items-center gap-2">
-                <i data-lucide="sparkles" class="w-4 h-4"></i>
-                <span>Add-on anfragen</span>
-            </a>
         </div>
 
-        <!-- Interactive Before/After Showcase Box -->
-        <div class="glass-panel p-6 md:p-8 rounded-3xl border border-brand-border shadow-2xl">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <!-- Project Switcher for Demo -->
+        <div class="glass-panel p-1.5 rounded-2xl flex items-center gap-1 shadow-2xl pointer-events-auto border border-brand-orange/30">
+            <button onclick="switchView('slider')" id="tab-slider" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow">
+                Vorher / Nachher Vergleich
+            </button>
+            <button onclick="switchView('unity')" id="tab-unity" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all">
+                Unity WebGL Engine
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Viewport Area -->
+    <main class="w-full h-full relative z-10 flex items-center justify-center p-4 md:p-8 pt-24">
+        
+        <!-- View 1: Before / After Interactive Suite -->
+        <div id="view-slider" class="w-full max-w-6xl h-[80vh] glass-panel rounded-3xl p-6 border border-brand-border shadow-2xl flex flex-col justify-between relative">
+            <div class="flex justify-between items-center mb-4">
                 <div>
-                    <h3 id="demo-title" class="text-lg font-bold text-white">Projekt-Demo 1: Komplettsanierung Altbau-Badezimmer</h3>
-                    <p class="text-xs text-slate-400">Ziehen Sie den Slider nach links oder rechts, um den Zustand vor und nach der Sanierung zu vergleichen.</p>
+                    <h2 id="demo-title" class="text-base md:text-lg font-bold text-white">Projekt: Komplettsanierung Altbau-Badezimmer</h2>
+                    <p class="text-xs text-slate-400">Interaktiver Schه‌بیه‌ساز سه‌بعدی قبل و بعد بازسازی برای مشتریان خاص</p>
                 </div>
-                
-                <!-- Project Selector Buttons -->
                 <div class="flex gap-2">
-                    <button onclick="switchDemoProject(0)" id="proj-btn-0" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all">Bad</button>
-                    <button onclick="switchDemoProject(1)" id="proj-btn-1" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition-all">Küche</button>
-                    <button onclick="switchDemoProject(2)" id="proj-btn-2" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition-all">Wohnbereich</button>
+                    <button onclick="setProject(0)" id="p-btn-0" class="px-3 py-1 rounded-lg text-xs font-bold bg-brand-orange text-white">Bad</button>
+                    <button onclick="setProject(1)" id="p-btn-1" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">Küche</button>
+                    <button onclick="setProject(2)" id="p-btn-2" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">Wohnbereich</button>
                 </div>
             </div>
 
-            <!-- Slider Container -->
-            <div id="interactive-slider" class="relative aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden border border-brand-border select-none shadow-2xl group">
-                
-                <!-- AFTER Image (Nachher) -->
-                <img id="demo-after" src="" alt="Nachher" class="absolute inset-0 w-full h-full object-cover">
-                <span class="absolute top-4 right-4 bg-emerald-500/90 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg backdrop-blur z-10">
-                    NACHHER (3D-Visualisierung / Fertig)
+            <!-- Comparison Box -->
+            <div id="transformation-box" class="relative flex-1 rounded-2xl overflow-hidden border border-brand-border select-none shadow-2xl group">
+                <img id="img-after" src="" alt="Nachher" class="absolute inset-0 w-full h-full object-cover">
+                <span class="absolute top-4 right-4 bg-emerald-500/90 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg z-10">
+                    NACHHER (Fertiggestellt)
                 </span>
 
-                <!-- BEFORE Image Container (Vorher) -->
-                <div id="demo-before-container" class="absolute inset-0 w-1/2 overflow-hidden z-20 border-r-2 border-brand-orange shadow-2xl">
-                    <img id="demo-before" src="" alt="Vorher" class="absolute inset-0 w-full h-full object-cover max-w-none">
-                    <span class="absolute top-4 left-4 bg-slate-900/90 text-brand-orange text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg backdrop-blur">
-                        VORHER (Rohbau / Bestandsaufnahme)
+                <div id="before-mask" class="absolute inset-0 w-1/2 overflow-hidden z-20 border-r-2 border-brand-orange shadow-2xl">
+                    <img id="img-before" src="" alt="Vorher" class="absolute inset-0 w-full h-full object-cover max-w-none">
+                    <span class="absolute top-4 left-4 bg-slate-900/90 text-brand-orange text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-lg">
+                        VORHER (Rohbau)
                     </span>
                 </div>
 
-                <!-- Handle Bar -->
-                <div id="demo-handle" class="absolute top-0 bottom-0 left-1/2 -ml-4 w-8 z-30 cursor-ew-resize flex items-center justify-center">
+                <div id="slider-handle" class="absolute top-0 bottom-0 left-1/2 -ml-4 w-8 z-30 cursor-ew-resize flex items-center justify-center">
                     <div class="w-8 h-8 rounded-full bg-brand-orange text-white shadow-xl flex items-center justify-center border-2 border-white group-hover:scale-110 transition-transform">
                         <i data-lucide="chevrons-left-right" class="w-4 h-4"></i>
                     </div>
                 </div>
 
-                <!-- Range Input -->
-                <input type="range" min="0" max="100" value="50" id="demo-range" class="absolute inset-0 w-full h-full opacity-0 z-40 cursor-ew-resize">
+                <input type="range" min="0" max="100" value="50" id="range-input" class="absolute inset-0 w-full h-full opacity-0 z-40 cursor-ew-resize">
+            </div>
+        </div>
+
+        <!-- View 2: Unity WebGL Placeholder (آماده برای خروجی یونیتی شما) -->
+        <div id="view-unity" class="w-full max-w-6xl h-[80vh] glass-panel rounded-3xl p-6 border border-brand-orange/30 shadow-2xl hidden flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/10 via-transparent to-slate-950 pointer-events-none"></div>
+            <div class="relative z-10 max-w-lg">
+                <div class="w-16 h-16 rounded-3xl bg-brand-orange/20 border border-brand-orange/50 flex items-center justify-center mx-auto mb-6 text-brand-orange shadow-lg shadow-orange-500/20">
+                    <i data-lucide="box" class="w-8 h-8 animate-bounce"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white mb-3">Unity WebGL Build Integration</h3>
+                <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                    Hier wird Ihre exportierte Unity WebGL-Applikation eingebunden. Nutzer können direkt im Browser mit Ihren C#-Skripten, UGUI und Shader-Effekten interagieren.
+                </p>
+                <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-400">
+                    &lt;iframe src="./unity-build/index.html" class="w-full h-full"&gt;&lt;/iframe&gt;
+                </div>
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer class="bg-black border-t border-brand-border py-6 px-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 Nord Bau Centrum. Custom 3D & BIM Architecture Solutions.</p>
-    </footer>
 
     <!-- SCRIPTS -->
     <script>
         lucide.createIcons();
 
-        const demoProjects = [
+        const projects = [
             {
-                title: "Projekt-Demo 1: Komplettsanierung Altbau-Badezimmer",
+                title: "Projekt: Komplettsanierung Altbau-Badezimmer",
                 before: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1400",
                 after: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1400"
             },
             {
-                title: "Projekt-Demo 2: Wanddurchbruch & Offene Wohnküche",
+                title: "Projekt: Wanddurchbruch & Offene Wohnküche",
                 before: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1400",
                 after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1400"
             },
             {
-                title: "Projekt-Demo 3: Dachgeschoss-Ausbau & Parkettverlegung",
+                title: "Projekt: Dachgeschoss-Ausbau & Parkettverlegung",
                 before: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&q=80&w=1400",
                 after: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1400"
             }
         ];
 
-        let currentIdx = 0;
-        const imgBefore = document.getElementById('demo-before');
-        const imgAfter = document.getElementById('demo-after');
+        let activeIdx = 0;
+        const imgBefore = document.getElementById('img-before');
+        const imgAfter = document.getElementById('img-after');
         const demoTitle = document.getElementById('demo-title');
-        const rangeInput = document.getElementById('demo-range');
-        const beforeContainer = document.getElementById('demo-before-container');
-        const handle = document.getElementById('demo-handle');
-        const sliderBox = document.getElementById('interactive-slider');
+        const rangeInput = document.getElementById('range-input');
+        const beforeMask = document.getElementById('before-mask');
+        const sliderHandle = document.getElementById('slider-handle');
+        const transformationBox = document.getElementById('transformation-box');
 
-        function switchDemoProject(index) {
-            currentIdx = index;
-            const p = demoProjects[currentIdx];
+        function setProject(idx) {
+            activeIdx = idx;
+            const p = projects[activeIdx];
             imgBefore.src = p.before;
             imgAfter.src = p.after;
             demoTitle.innerText = p.title;
 
             for(let i=0; i<3; i++) {
-                const btn = document.getElementById(`proj-btn-${i}`);
-                if(i === index) {
-                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all";
+                const btn = document.getElementById(`p-btn-${i}`);
+                if(i === idx) {
+                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-brand-orange text-white";
                 } else {
-                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition-all";
+                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300";
                 }
             }
-
-            if(sliderBox && imgBefore) {
-                imgBefore.style.width = `${sliderBox.clientWidth}px`;
+            if(transformationBox && imgBefore) {
+                imgBefore.style.width = `${transformationBox.clientWidth}px`;
             }
         }
 
         rangeInput.addEventListener('input', (e) => {
-            const val = e.target.value;
-            beforeContainer.style.width = `${val}%`;
-            handle.style.left = `${val}%`;
+            const v = e.target.value;
+            beforeMask.style.width = `${v}%`;
+            sliderHandle.style.left = `${v}%`;
         });
 
+        function switchView(mode) {
+            const vSlider = document.getElementById('view-slider');
+            const vUnity = document.getElementById('view-unity');
+            const tSlider = document.getElementById('tab-slider');
+            const tUnity = document.getElementById('tab-unity');
+
+            if(mode === 'slider') {
+                vSlider.classList.remove('hidden');
+                vUnity.classList.add('hidden');
+                tSlider.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow";
+                tUnity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all";
+            } else {
+                vSlider.classList.add('hidden');
+                vUnity.classList.remove('hidden');
+                tUnity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-brand-orange text-white transition-all shadow";
+                tSlider.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all";
+            }
+        }
+
         window.addEventListener('resize', () => {
-            if(sliderBox && imgBefore) {
-                imgBefore.style.width = `${sliderBox.clientWidth}px`;
+            if(transformationBox && imgBefore) {
+                imgBefore.style.width = `${transformationBox.clientWidth}px`;
             }
         });
 
-        setTimeout(() => { switchDemoProject(0); }, 150);
+        setTimeout(() => { setProject(0); }, 150);
     </script>
 </body>
 </html>
