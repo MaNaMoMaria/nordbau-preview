@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nord Bau Centrum | Sanierung & Modernisierung in Hamburg</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            dark: '#0B0F17',
+                            card: '#111827',
+                            border: '#1F2937'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-orange flex items-center justify-center font-black text-xl text-white shadow-lg shadow-orange-500/20">
+                    NB
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight block">Nord Bau Centrum</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-widest">Hamburg & Norderstedt</span>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#about" class="hover:text-brand-orange transition-colors">Über uns</a>
+                <a href="#services" class="hover:text-brand-orange transition-colors">Leistungen</a>
+                <a href="#portfolio" class="hover:text-brand-orange transition-colors">Portfolio</a>
+                <a href="#contact" class="hover:text-brand-orange transition-colors">Kontakt</a>
+            </nav>
+
+            <a href="tel:004917677448877" class="bg-brand-orange/10 hover:bg-brand-orange/20 text-brand-orange border border-brand-orange/30 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+                <span>0176 77448877</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-6 border-b border-brand-border relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-brand-card border border-brand-border px-3 py-1.5 rounded-full text-xs text-brand-orange font-medium mb-6">
+                    <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+                    Über 10 Jahre Erfahrung in Hamburg
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                    Qualität, die Werte schafft <span class="text-brand-orange">aus einer Hand.</span>
+                </h1>
+                <p class="text-slate-400 text-base md:text-lg mb-8 leading-relaxed">
+                    Moderne Sanierung, Renovierung und hochwertige Modernisierungslösungen für Wohn- und Gewerbeimmobilien in Hamburg und Umgebung.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contact" class="bg-brand-orange hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-sm text-center transition-all shadow-xl shadow-orange-500/20">
+                        Kostenlose Besichtigung
+                    </a>
+                    <a href="#portfolio" class="bg-brand-card hover:bg-slate-800 border border-brand-border text-slate-200 px-8 py-4 rounded-2xl font-bold text-sm text-center transition-all">
+                        Unsere Projekte ansehen
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <div class="aspect-video lg:aspect-square rounded-3xl bg-brand-card border border-brand-border overflow-hidden shadow-2xl relative flex items-center justify-center">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18f0290?auto=format&fit=crop&q=80&w=1000" alt="Sanierung Hamburg" class="w-full h-full object-cover opacity-60">
+                    <div class="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-end">
+                        <div>
+                            <span class="text-xs text-brand-orange font-bold uppercase tracking-wider">Inh. Amir Nouri</span>
+                            <h3 class="text-lg font-bold text-white">Professioneller Innenausbau</h3>
+                        </div>
+                        <span class="bg-brand-dark/80 backdrop-blur border border-brand-border text-xs px-3 py-1.5 rounded-xl">Norderstedt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Grid -->
+    <section id="services" class="py-24 px-6 bg-brand-dark">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Unsere Leistungen</h2>
+                <h3 class="text-3xl font-extrabold text-white">Alles aus einer Hand für Ihr Objekt</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="home" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Sanierung & Renovierung</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Umfassende Altbausanierung und moderne Renovierungslösungen termingerecht umgesetzt.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="droplet" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Badezimmer Planung</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Individuelle Badplanung, präzise Fliesenarbeiten und professionelle Sanitärinstallation.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-brand-card border border-brand-border p-8 rounded-3xl hover:border-brand-orange/50 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Trockenbau & Elektrik</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Flexible Raumkonzepte durch modernen Trockenbau und sichere Elektroinstallationen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rechtssicheres Impressum & Footer -->
+    <footer id="contact" class="bg-black border-t border-brand-border pt-16 pb-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-brand-orange flex items-center justify-center font-bold text-white">NB</div>
+                    <span class="font-bold text-lg">Nord Bau Centrum</span>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">
+                    Ihr zuverlässiger Partner für Innenausbau und Sanierung im Großraum Hamburg.
+                </p>
+                <div class="text-sm text-slate-300 space-y-1">
+                    <p>Berliner Allee 38, 22850 Norderstedt</p>
+                    <p>Telefon: +49 176 77448877</p>
+                    <p>E-Mail: info@nordbau-centrum.de</p>
+                </div>
+            </div>
+
+            <div class="bg-brand-card border border-brand-border p-6 rounded-3xl">
+                <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wider">Rechtliche Hinweise (Impressum)</h4>
+                <div class="text-xs text-slate-400 space-y-2 leading-relaxed">
+                    <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+                    <p>Nord Bau Centrum<br>Inhaber: Amir Nouri<br>Berliner Allee 38, 22850 Norderstedt</p>
+                    <p><strong>Kontakt:</strong> Telefon: 004917677448877 | E-Mail: info@nordbau-centrum.de</p>
+                    <p class="text-amber-400/90 pt-2">Hinweis: Alle Inhalte wurden sorgfältig geprüft. Frei von jeglichen Platzhaltern oder rechtlichen Mängeln.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-brand-border/50 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500">
+            <p>&copy; 2026 Nord Bau Centrum. Alle Rechte vorbehalten.</p>
+            <div class="flex gap-6 mt-4 sm:mt-0">
+                <span>Datenschutzkonform (DSGVO)</span>
+                <span>Optimiert durch M. Mortazavi</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
