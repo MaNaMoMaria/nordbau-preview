@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nord Bau Centrum | Pro 3D Interior & Interactive Planner</title>
+    <title>Nord Bau Centrum | Interactive 3D Showcase</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,345 +19,55 @@
             }
         }
     </script>
-    <!-- Lucide Icons & Three.js -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
     
     <style>
-        body { margin: 0; overflow: hidden; font-family: ui-sans-serif, system-ui, sans-serif; }
-        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 0; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #070A0F; font-family: ui-sans-serif, system-ui, sans-serif; }
         .glass-panel {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-brand-dark text-slate-100 h-full select-none">
 
-    <!-- 3D Canvas Viewport -->
-    <div id="canvas-container"></div>
-
-    <!-- UI Overlay Layer -->
-    <div class="relative z-10 flex flex-col justify-between h-full pointer-events-none p-4 md:p-6">
-        
-        <!-- Top App Bar -->
-        <div class="flex justify-between items-center w-full pointer-events-auto">
-            <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl">
-                <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    <span>Exit Studio</span>
-                </a>
-                <div class="h-4 w-px bg-slate-700"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></div>
-                <div>
-                    <span class="font-extrabold text-sm text-white block tracking-tight">NordBau Pro 3D Studio</span>
-                    <span class="text-[10px] text-brand-orange font-mono">Interactive Room & Furniture Placer</span>
-                </div>
-            </div>
-
-            <!-- Helper Notice -->
-            <div class="glass-panel px-4 py-2 rounded-2xl text-xs text-slate-300 hidden md:flex items-center gap-2 shadow-xl">
-                <i data-lucide="info" class="w-4 h-4 text-brand-orange"></i>
-                <span>Click any added object to move or rotate it freely in 3D space</span>
+    <!-- Top Navigation Bar Overlay -->
+    <div class="absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-none">
+        <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-2xl pointer-events-auto">
+            <a href="index.html" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl transition-all hover:bg-brand-orange">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Zurück zur Website</span>
+            </a>
+            <div class="h-4 w-px bg-slate-700"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></div>
+            <div>
+                <span class="font-extrabold text-sm text-white block tracking-tight">NordBau 3D Showcase</span>
+                <span class="text-[10px] text-brand-orange font-mono">Photorealistic Virtual Walkthrough</span>
             </div>
         </div>
 
-        <!-- Left Interactive Tool Drawer -->
-        <div class="absolute left-6 top-20 bottom-20 w-80 glass-panel rounded-3xl p-5 pointer-events-auto flex flex-col justify-between shadow-2xl z-20 border border-brand-orange/20 overflow-hidden">
-            <div class="flex flex-col h-full">
-                <!-- Header -->
-                <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5 text-brand-orange"></i>
-                        <h3 class="font-extrabold text-xs text-white uppercase tracking-wider">Design & Furniture</h3>
-                    </div>
-                </div>
-
-                <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1 flex-1 text-xs">
-                    
-                    <!-- Section 1: Target Surface for Textures -->
-                    <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
-                        <label class="font-bold text-slate-400 block mb-2">1. Select Surface to Style</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button id="target-floor" onclick="setTarget('floor')" class="py-2 px-2 rounded-xl font-bold bg-brand-orange text-white transition-all">Floor Surface</button>
-                            <button id="target-wall" onclick="setTarget('wall')" class="py-2 px-2 rounded-xl font-bold bg-slate-800 text-slate-400 hover:text-white transition-all">Wall Surface</button>
-                        </div>
-                    </div>
-
-                    <!-- Section 2: Material & Tile Presets -->
-                    <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
-                        <label class="font-bold text-slate-400 block mb-2">2. Pro Textures & Finishes</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="applyTexture('marble')" class="p-2 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-orange text-left group">
-                                <div class="w-full h-6 rounded bg-slate-200 mb-1"></div>
-                                <span class="font-bold text-slate-200 group-hover:text-brand-orange block">Carrara Marble</span>
-                            </button>
-                            <button onclick="applyTexture('wood')" class="p-2 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-orange text-left group">
-                                <div class="w-full h-6 rounded bg-amber-800 mb-1"></div>
-                                <span class="font-bold text-slate-200 group-hover:text-brand-orange block">Natural Oak</span>
-                            </button>
-                            <button onclick="applyTexture('concrete')" class="p-2 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-orange text-left group">
-                                <div class="w-full h-6 rounded bg-slate-700 mb-1"></div>
-                                <span class="font-bold text-slate-200 group-hover:text-brand-orange block">Industrial Loft</span>
-                            </button>
-                            <button onclick="applyTexture('brand')" class="p-2 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-orange text-left group">
-                                <div class="w-full h-6 rounded bg-orange-600 mb-1"></div>
-                                <span class="font-bold text-slate-200 group-hover:text-brand-orange block">NordBau Accent</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Section 3: Add Movable Furniture & Decor -->
-                    <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
-                        <label class="font-bold text-slate-400 block mb-2">3. Place 3D Objects & Furniture</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="addObject('sofa')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="sofa" class="w-4 h-4 text-brand-orange"></i> Add Sofa
-                            </button>
-                            <button onclick="addObject('table')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="table" class="w-4 h-4 text-amber-400"></i> Add Table
-                            </button>
-                            <button onclick="addObject('plant')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="flower-2" class="w-4 h-4 text-emerald-400"></i> Add Plant
-                            </button>
-                            <button onclick="addObject('lamp')" class="py-2.5 px-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="lamp" class="w-4 h-4 text-yellow-400"></i> Add Lamp
-                            </button>
-                        </div>
-                        <button onclick="clearAllObjects()" class="mt-2 w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-bold transition-all text-center">
-                            Clear All Objects
-                        </button>
-                    </div>
-
-                    <!-- Section 4: Custom Image Upload -->
-                    <div class="bg-gradient-to-br from-slate-900 to-brand-card p-3 rounded-2xl border border-brand-orange/30">
-                        <label class="font-bold text-white block mb-1 flex items-center gap-1.5">
-                            <i data-lucide="upload" class="w-3.5 h-3.5 text-brand-orange"></i> Custom Texture Upload
-                        </label>
-                        <p class="text-[10px] text-slate-400 mb-2">Upload tile sample image (JPG/PNG):</p>
-                        <label class="flex items-center justify-center w-full h-11 px-3 bg-slate-950 border border-slate-800 border-dashed rounded-xl cursor-pointer hover:border-brand-orange transition-all">
-                            <span class="font-semibold text-[11px] text-slate-300">Choose Image File</span>
-                            <input type="file" id="custom-texture" accept="image/*" class="hidden">
-                        </label>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Center Bottom Toolbar -->
-        <div class="self-center glass-panel px-4 py-2 rounded-2xl flex items-center gap-2 pointer-events-auto shadow-2xl mb-2 border border-slate-800">
-            <button onclick="toggleDayNight()" id="btn-light" class="p-2.5 rounded-xl text-brand-orange bg-slate-800/80 hover:bg-slate-700 transition-all" title="Day/Night Mode"><i data-lucide="sun" class="w-4 h-4"></i></button>
-            <button onclick="resetCamera()" class="p-2.5 rounded-xl text-slate-400 hover:text-white transition-all" title="Reset View"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+        <div class="glass-panel px-4 py-2 rounded-2xl text-xs text-slate-300 hidden md:flex items-center gap-2 shadow-xl pointer-events-auto">
+            <i data-lucide="compass" class="w-4 h-4 text-brand-orange"></i>
+            <span>Interaktive 360°-Rundgang: Nutzen Sie die Maus zur Navigation</span>
         </div>
     </div>
 
-    <!-- Advanced 3D Engine Script with TransformControls -->
+    <!-- Photorealistic 3D Virtual Tour Viewer (Sketchfab Engine) -->
+    <div class="w-full h-full relative z-10">
+        <iframe 
+            title="NordBau Modern Luxury Apartment 3D Showcase" 
+            class="w-full h-full border-0" 
+            src="https://sketchfab.com/models/ee3d83ee66cb47d995c61a1532f7aa53/embed?autostart=1&cardboard=0&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0"
+            allow="autoplay; fullscreen; xr-spatial-tracking" 
+            execution-while-out-of-viewport 
+            execution-while-not-rendered 
+            web-share>
+        </iframe>
+    </div>
+
     <script>
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x070a0f);
-        scene.fog = new THREE.FogExp2(0x070a0f, 0.025);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(12, 9, 14);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
-
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2 - 0.02;
-
-        // Transform Controls for moving objects
-        const transformControls = new THREE.TransformControls(camera, renderer.domElement);
-        transformControls.size = 0.75;
-        scene.add(transformControls);
-
-        transformControls.addEventListener('dragging-changed', function (event) {
-            controls.enabled = !event.value; // Disable orbit control while transforming object
-        });
-
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        const mainLight = new THREE.DirectionalLight(0xffffff, 1.3);
-        mainLight.position.set(15, 20, 15);
-        mainLight.castShadow = true;
-        scene.add(mainLight);
-
-        // Room Structures
-        const floorGeo = new THREE.PlaneGeometry(10, 10);
-        const wallGeo = new THREE.PlaneGeometry(10, 5);
-
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 });
-        const wallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        const backWall = new THREE.Mesh(wallGeo, wallMat);
-        backWall.position.set(0, 2.5, -5);
-        backWall.receiveShadow = true;
-        scene.add(backWall);
-
-        const leftWall = new THREE.Mesh(wallGeo, wallMat);
-        leftWall.position.set(-5, 2.5, 0);
-        leftWall.rotation.y = Math.PI / 2;
-        leftWall.receiveShadow = true;
-        scene.add(leftWall);
-
-        // Interactive Objects Collection
-        const movableObjects = [];
-        let activeTarget = 'floor';
-
-        function setTarget(target) {
-            activeTarget = target;
-            document.getElementById('target-floor').className = target === 'floor' ? "py-2 px-2 rounded-xl font-bold bg-brand-orange text-white transition-all" : "py-2 px-2 rounded-xl font-bold bg-slate-800 text-slate-400 hover:text-white transition-all";
-            document.getElementById('target-wall').className = target === 'wall' ? "py-2 px-2 rounded-xl font-bold bg-brand-orange text-white transition-all" : "py-2 px-2 rounded-xl font-bold bg-slate-800 text-slate-400 hover:text-white transition-all";
-        }
-
-        // Texture Presets
-        function applyTexture(type) {
-            let mat = activeTarget === 'floor' ? floorMat : wallMat;
-            mat.map = null;
-            if (type === 'marble') { mat.color.setHex(0xe2e8f0); mat.roughness = 0.1; }
-            else if (type === 'wood') { mat.color.setHex(0x78350f); mat.roughness = 0.6; }
-            else if (type === 'concrete') { mat.color.setHex(0x475569); mat.roughness = 0.4; }
-            else if (type === 'brand') { mat.color.setHex(0xf97316); mat.roughness = 0.3; }
-            mat.needsUpdate = true;
-        }
-
-        // Custom Texture Upload
-        const textureLoader = new THREE.TextureLoader();
-        document.getElementById('custom-texture').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    textureLoader.load(evt.target.result, (tex) => {
-                        tex.wrapS = THREE.RepeatWrapping;
-                        tex.wrapT = THREE.RepeatWrapping;
-                        tex.repeat.set(4, 4);
-                        let mat = activeTarget === 'floor' ? floorMat : wallMat;
-                        mat.map = tex;
-                        mat.color.setHex(0xffffff);
-                        mat.needsUpdate = true;
-                    });
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Add Movable Furniture & Decor
-        function addObject(type) {
-            let objGroup = new THREE.Group();
-
-            if (type === 'sofa') {
-                const base = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.7, 1.1), new THREE.MeshStandardMaterial({ color: 0x334155 }));
-                base.position.y = 0.35; base.castShadow = true;
-                const back = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.1, 0.3), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-                back.position.set(0, 0.9, -0.4); back.castShadow = true;
-                objGroup.add(base); objGroup.add(back);
-            } else if (type === 'table') {
-                const top = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.1, 1.2), new THREE.MeshStandardMaterial({ color: 0x78350f }));
-                top.position.y = 1.0; top.castShadow = true;
-                [[-1, 0.5, -0.5], [1, 0.5, -0.5], [-1, 0.5, 0.5], [1, 0.5, 0.5]].forEach(p => {
-                    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-                    leg.position.set(...p); leg.castShadow = true;
-                    objGroup.add(leg);
-                });
-                objGroup.add(top);
-            } else if (type === 'plant') {
-                const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.25, 0.7, 16), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
-                pot.position.y = 0.35;
-                const leaves = new THREE.Mesh(new THREE.SphereGeometry(0.55, 16, 16), new THREE.MeshStandardMaterial({ color: 0x10b981 }));
-                leaves.position.y = 1.0;
-                objGroup.add(pot); objGroup.add(leaves);
-            } else if (type === 'lamp') {
-                const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 3.2), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-                pole.position.y = 1.6;
-                const shade = new THREE.Mesh(new THREE.ConeGeometry(0.4, 0.6, 16), new THREE.MeshStandardMaterial({ color: 0xf97316 }));
-                shade.position.y = 3.1;
-                objGroup.add(pole); objGroup.add(shade);
-            }
-
-            objGroup.position.set((Math.random() - 0.5) * 4, 0, (Math.random() - 0.5) * 4);
-            scene.add(objGroup);
-            movableObjects.push(objGroup);
-            
-            // Attach transform controls to newly added object immediately
-            transformControls.attach(objGroup);
-        }
-
-        function clearAllObjects() {
-            movableObjects.forEach(obj => scene.remove(obj));
-            movableObjects.length = 0;
-            transformControls.detach();
-        }
-
-        // Raycaster to select objects with mouse click
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-
-        window.addEventListener('pointerdown', (event) => {
-            if (event.target.closest('button') || event.target.closest('a') || event.target.closest('input')) return;
-
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(movableObjects, true);
-
-            if (intersects.length > 0) {
-                let selected = intersects[0].object;
-                while (selected.parent && selected.parent !== scene) {
-                    selected = selected.parent;
-                }
-                transformControls.attach(selected);
-            }
-        });
-
-        let isDay = true;
-        function toggleDayNight() {
-            isDay = !isDay;
-            mainLight.intensity = isDay ? 1.3 : 0.2;
-            ambientLight.intensity = isDay ? 0.6 : 0.2;
-            scene.background.setHex(isDay ? 0x070a0f : 0x010204);
-        }
-
-        function resetCamera() {
-            camera.position.set(12, 9, 14);
-            controls.target.set(0, 1, 0);
-            transformControls.detach();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
         lucide.createIcons();
     </script>
 </body>
