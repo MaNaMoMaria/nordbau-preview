@@ -47,7 +47,7 @@
 </head>
 <body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white">
 
-    <!-- Modern Loading Screen Animation -->
+    <!-- Modern Loading Screen Animation (Only shown on first session visit) -->
     <div id="page-loader">
         <div class="relative flex items-center justify-center mb-6">
             <div class="absolute inset-0 bg-brand-orange/30 rounded-full blur-2xl animate-pulse"></div>
@@ -83,7 +83,7 @@
             </a>
             
             <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-300">
-                <a href="#services" class="hover:text-brand-orange transition-colors">Leistungen</a>
+                <a href="index.html" class="hover:text-brand-orange transition-colors">Startseite</a>
                 <a href="#gallery" class="hover:text-brand-orange transition-colors">Vorher / Nachher</a>
                 <a href="#team" class="hover:text-brand-orange transition-colors">Team</a>
                 <a href="3d-studio.html" class="text-brand-orange hover:text-white transition-colors flex items-center gap-1">
@@ -352,13 +352,18 @@
     <script>
         lucide.createIcons();
 
-        // Smooth Page Loader Handler
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('page-loader');
-            setTimeout(() => {
-                loader.classList.add('fade-out');
-            }, 600); // 0.6 second sleek delay before fading out
-        });
+        // Check sessionStorage to show loader only on the first visit of the session
+        const loader = document.getElementById('page-loader');
+        if (sessionStorage.getItem('nbc_visited')) {
+            if (loader) loader.style.display = 'none';
+        } else {
+            sessionStorage.setItem('nbc_visited', 'true');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    if (loader) loader.classList.add('fade-out');
+                }, 600);
+            });
+        }
 
         // Gallery logic for before and after transformation projects
         const projects = [
@@ -440,35 +445,59 @@
 
         setTimeout(() => { updateProject(0); }, 200);
 
-        // Background music management with browser autoplay bypass via user interaction
+        // Persistent background music across pages using localStorage
         const music = document.getElementById("bg-music");
         const soundBtn = document.getElementById("sound-toggle-btn");
         const volumeSlider = document.getElementById("volume-slider");
 
-        // Set initial soft volume to 20%
-        music.volume = 0.2;
+        // Restore saved volume or default to 20%
+        const savedVolume = localStorage.getItem('nbc_audio_volume');
+        music.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
+        volumeSlider.value = music.volume;
+
+        // Restore saved playback time if available
+        const savedTime = localStorage.getItem('nbc_audio_time');
+        if (savedTime) {
+            music.currentTime = parseFloat(savedTime);
+        }
+
+        // Check if music was playing previously
+        const isPlaying = localStorage.getItem('nbc_audio_playing') === 'true';
 
         window.addEventListener('DOMContentLoaded', () => {
-            music.play().then(() => {
-                soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
-                lucide.createIcons();
-            }).catch(() => {
+            if (isPlaying) {
+                music.play().then(() => {
+                    soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
+                    lucide.createIcons();
+                }).catch(() => {
+                    soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
+                    lucide.createIcons();
+                });
+            } else {
                 soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
                 lucide.createIcons();
+            }
 
-                const unlockAudio = () => {
-                    music.volume = volumeSlider.value;
+            // Global interaction listener to unlock audio policy if blocked
+            const unlockAudio = () => {
+                if (music.paused && localStorage.getItem('nbc_audio_playing') === 'true') {
                     music.play().then(() => {
                         soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
                         lucide.createIcons();
-                        document.removeEventListener('click', unlockAudio);
-                        document.removeEventListener('keydown', unlockAudio);
-                    }).catch(e => console.log("Audio play blocked", e));
-                };
+                    }).catch(e => console.log("Audio play error", e));
+                }
+                document.removeEventListener('click', unlockAudio);
+                document.removeEventListener('keydown', unlockAudio);
+            };
+            document.addEventListener('click', unlockAudio);
+            document.addEventListener('keydown', unlockAudio);
+        });
 
-                document.addEventListener('click', unlockAudio);
-                document.addEventListener('keydown', unlockAudio);
-            });
+        // Save audio state before navigating to another page
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('nbc_audio_time', music.currentTime);
+            localStorage.setItem('nbc_audio_playing', !music.paused);
+            localStorage.setItem('nbc_audio_volume', music.volume);
         });
 
         function toggleSound() {
@@ -477,20 +506,27 @@
                 soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
                 if (volumeSlider.value == 0) volumeSlider.value = 0.2;
                 music.volume = volumeSlider.value;
+                localStorage.setItem('nbc_audio_playing', 'true');
             } else {
                 music.pause();
                 soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
+                localStorage.setItem('nbc_audio_playing', 'false');
             }
             lucide.createIcons();
         }
 
         function changeVolume(val) {
             music.volume = val;
+            localStorage.setItem('nbc_audio_volume', val);
             if (val == 0) {
                 soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
                 if(!music.paused) music.pause();
+                localStorage.setItem('nbc_audio_playing', 'false');
             } else {
-                if(music.paused) music.play();
+                if(music.paused) {
+                    music.play();
+                    localStorage.setItem('nbc_audio_playing', 'true');
+                }
                 soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
             }
             lucide.createIcons();
