@@ -25,8 +25,42 @@
     </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Smooth loading screen overlay styles */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            background-color: #070A0F;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #page-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
 </head>
 <body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white">
+
+    <!-- Modern Loading Screen Animation -->
+    <div id="page-loader">
+        <div class="relative flex items-center justify-center mb-6">
+            <div class="absolute inset-0 bg-brand-orange/30 rounded-full blur-2xl animate-pulse"></div>
+            <img src="./images/LogoWithoutBG.png" alt="Nord Bau Centrum" class="w-24 h-auto relative z-10 animate-bounce">
+        </div>
+        <div class="text-center">
+            <h2 class="text-white font-extrabold text-lg tracking-wider mb-2">Nord Bau Centrum</h2>
+            <div class="w-32 h-1 bg-slate-800 rounded-full overflow-hidden mx-auto">
+                <div class="w-full h-full bg-gradient-to-r from-brand-orange to-amber-400 animate-[pulse_1s_infinite]"></div>
+            </div>
+            <span class="text-[11px] text-brand-orange uppercase tracking-widest block mt-3 font-semibold">Lade High-End Experience...</span>
+        </div>
+    </div>
 
     <!-- Background Audio Element -->
     <audio id="bg-music" loop>
@@ -66,7 +100,7 @@
                 <!-- Audio Control Widget in Header -->
                 <div class="hidden sm:flex items-center gap-2 bg-brand-card border border-brand-border px-3 py-2 rounded-2xl shadow-lg">
                     <button id="sound-toggle-btn" onclick="toggleSound()" title="Toggle Sound" class="text-brand-orange hover:text-white transition-colors flex items-center justify-center">
-                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        <i data-lucide="volume-x" class="w-4 h-4"></i>
                     </button>
                     <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.2" oninput="changeVolume(this.value)" title="Volume Slider" class="w-16 accent-orange-500 cursor-pointer h-1 bg-slate-800 rounded-lg">
                 </div>
@@ -318,6 +352,14 @@
     <script>
         lucide.createIcons();
 
+        // Smooth Page Loader Handler
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('page-loader');
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 600); // 0.6 second sleek delay before fading out
+        });
+
         // Gallery logic for before and after transformation projects
         const projects = [
             {
@@ -398,12 +440,12 @@
 
         setTimeout(() => { updateProject(0); }, 200);
 
-        // Background music management with very low soft volume and autoplay
+        // Background music management with browser autoplay bypass via user interaction
         const music = document.getElementById("bg-music");
         const soundBtn = document.getElementById("sound-toggle-btn");
         const volumeSlider = document.getElementById("volume-slider");
 
-        // Set initial soft background volume to 20%
+        // Set initial soft volume to 20%
         music.volume = 0.2;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -413,6 +455,19 @@
             }).catch(() => {
                 soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
                 lucide.createIcons();
+
+                const unlockAudio = () => {
+                    music.volume = volumeSlider.value;
+                    music.play().then(() => {
+                        soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
+                        lucide.createIcons();
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('keydown', unlockAudio);
+                    }).catch(e => console.log("Audio play blocked", e));
+                };
+
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('keydown', unlockAudio);
             });
         });
 
