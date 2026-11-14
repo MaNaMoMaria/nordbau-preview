@@ -28,6 +28,11 @@
 </head>
 <body class="bg-brand-dark text-slate-100 h-full selection:bg-brand-orange selection:text-white">
 
+    <!-- Background Audio Element -->
+    <audio id="bg-music" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Header / Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/90 backdrop-blur-xl border-b border-brand-border/60">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -56,10 +61,21 @@
                 <a href="#contact" class="hover:text-brand-orange transition-colors">Kontakt</a>
             </nav>
 
-            <a href="tel:004917677448877" class="bg-gradient-to-r from-brand-orange to-amber-600 hover:opacity-90 text-white px-5 py-2.5 rounded-2xl text-xs font-bold transition-all shadow-lg shadow-orange-500/25 flex items-center gap-2">
-                <i data-lucide="phone-call" class="w-4 h-4"></i>
-                <span>0176 77448877</span>
-            </a>
+            <!-- Right Header Actions (Audio Controller & Phone) -->
+            <div class="flex items-center gap-3">
+                <!-- Audio Control Widget in Header -->
+                <div class="hidden sm:flex items-center gap-2 bg-brand-card border border-brand-border px-3 py-2 rounded-2xl shadow-lg">
+                    <button id="sound-toggle-btn" onclick="toggleSound()" title="Toggle Sound" class="text-brand-orange hover:text-white transition-colors flex items-center justify-center">
+                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.2" oninput="changeVolume(this.value)" title="Volume Slider" class="w-16 accent-orange-500 cursor-pointer h-1 bg-slate-800 rounded-lg">
+                </div>
+
+                <a href="tel:004917677448877" class="bg-gradient-to-r from-brand-orange to-amber-600 hover:opacity-90 text-white px-5 py-2.5 rounded-2xl text-xs font-bold transition-all shadow-lg shadow-orange-500/25 flex items-center gap-2">
+                    <i data-lucide="phone-call" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">0176 77448877</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -298,22 +314,6 @@
         </div>
     </footer>
 
-    <!-- BACKGROUND MUSIC AUDIO & TOGGLE BUTTON -->
-    <audio id="bg-music" loop>
-      <source src="background-music.mp3" type="audio/mpeg">
-    </audio>
-
-    <button id="sound-toggle-btn" onclick="toggleSound()" title="Toggle Background Music" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(0, 0, 0, 0.7); border: 2px solid rgba(255, 255, 255, 0.2); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s ease;">
-      🔊
-    </button>
-
-    <style>
-      #sound-toggle-btn:hover {
-        background: rgba(255, 123, 0, 0.9);
-        border-color: #ff7b00;
-      }
-    </style>
-
     <!-- SCRIPTS -->
     <script>
         lucide.createIcons();
@@ -398,33 +398,47 @@
 
         setTimeout(() => { updateProject(0); }, 200);
 
-        // Attempt soft autoplay with low volume when DOM loads
-        window.addEventListener('DOMContentLoaded', (event) => {
-            var music = document.getElementById("bg-music");
-            music.volume = 0.4; // Set volume to a gentle 40%
-            var playPromise = music.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    document.getElementById("sound-toggle-btn").innerHTML = "🔊";
-                }).catch(error => {
-                    document.getElementById("sound-toggle-btn").innerHTML = "🔇";
-                });
-            }
+        // Background music management with very low soft volume and autoplay
+        const music = document.getElementById("bg-music");
+        const soundBtn = document.getElementById("sound-toggle-btn");
+        const volumeSlider = document.getElementById("volume-slider");
+
+        // Set initial soft background volume to 20%
+        music.volume = 0.2;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            music.play().then(() => {
+                soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
+                lucide.createIcons();
+            }).catch(() => {
+                soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
+                lucide.createIcons();
+            });
         });
 
-        // Toggle audio playback and update icon accordingly
         function toggleSound() {
-            var music = document.getElementById("bg-music");
-            var btn = document.getElementById("sound-toggle-btn");
-            
             if (music.paused) {
                 music.play();
-                btn.innerHTML = "🔊"; // Sound active icon
+                soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
+                if (volumeSlider.value == 0) volumeSlider.value = 0.2;
+                music.volume = volumeSlider.value;
             } else {
                 music.pause();
-                btn.innerHTML = "🔇"; // Muted icon
+                soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
             }
+            lucide.createIcons();
+        }
+
+        function changeVolume(val) {
+            music.volume = val;
+            if (val == 0) {
+                soundBtn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4"></i>';
+                if(!music.paused) music.pause();
+            } else {
+                if(music.paused) music.play();
+                soundBtn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i>';
+            }
+            lucide.createIcons();
         }
     </script>
 </body>
