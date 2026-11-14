@@ -104,7 +104,7 @@
         </div>
     </section>
 
-    <!-- BEFORE / AFTER 5-PROJECT GALLERY SECTION (با تصاویر واقعی و منطقی) -->
+    <!-- BEFORE / AFTER GALLERY SECTION -->
     <section id="gallery" class="py-24 px-6 bg-slate-950/80 border-t border-brand-border relative">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
@@ -222,10 +222,9 @@
         </div>
     </section>
 
-    <!-- CONTACT & IMPRESSUM SECTION (بخش ارتباط با ما و اطلاعات حقوقی رسمی آلمان) -->
+    <!-- CONTACT & IMPRESSUM SECTION -->
     <section id="contact" class="py-24 px-6 bg-slate-950 border-t border-brand-border relative">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <!-- Contact Info & Legal -->
             <div>
                 <h2 class="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Kontakt & Impressum</h2>
                 <h3 class="text-3xl font-extrabold text-white mb-6">Sprechen Sie mit uns</h3>
@@ -254,7 +253,7 @@
                     </div>
                 </div>
 
-                <!-- Legal Notice (Impressum Info) -->
+                <!-- Legal Notice -->
                 <div class="p-5 rounded-2xl bg-brand-card border border-brand-border text-xs text-slate-400 space-y-2">
                     <p class="font-bold text-white">Angaben gemäß § 5 TMG / Impressum:</p>
                     <p>Nord Bau Centrum – Inhaber: Kianoosh Nouri</p>
@@ -299,36 +298,52 @@
         </div>
     </footer>
 
+    <!-- BACKGROUND MUSIC AUDIO & TOGGLE BUTTON -->
+    <audio id="bg-music" loop>
+      <source src="TemplateData/background-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="sound-toggle-btn" onclick="toggleSound()" title="Toggle Background Music" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(0, 0, 0, 0.7); border: 2px solid rgba(255, 255, 255, 0.2); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s ease;">
+      🔊
+    </button>
+
+    <style>
+      #sound-toggle-btn:hover {
+        background: rgba(255, 123, 0, 0.9);
+        border-color: #ff7b00;
+      }
+    </style>
+
     <!-- SCRIPTS -->
     <script>
         lucide.createIcons();
 
-        // منطق گالری قبل و بعد با تصاویر واقعی‌ترِ ساختمانی و بازسازی
+        // Gallery logic for before and after transformation projects
         const projects = [
             {
                 title: "Projekt 1: Badezimmer Rohbau / Altbestand zur Luxus-Oase",
-                before: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1200", // نمای تخریب/کارگاهی
-                after: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1200"   // نتیجه نهایی لوکس
+                before: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=1200"
             },
             {
                 title: "Projekt 2: Offene Wohnküche & Wanddurchbruch",
-                before: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200", // فضای در حال بازسازی
-                after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"   // آشپزخانه مدرن
+                before: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
             },
             {
                 title: "Projekt 3: Altbau Komplettsanierung & Parkett",
-                before: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200", // اتاق قدیمی
-                after: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200"   // پذیرایی مدرن
+                before: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200"
             },
             {
                 title: "Projekt 4: Dachgeschoss Ausbau & Isolierung",
-                before: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&q=80&w=1200", // تیرچه و سقف خام
-                after: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1200"   // اتاق زیرشیروانی شیک
+                before: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1200"
             },
             {
                 title: "Projekt 5: Fassade & Terrassen Neugestaltung",
-                before: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&q=80&w=1200", // نمای فرسوده
-                after: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200"   // نمای نهایی مدرن
+                before: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200"
             }
         ];
 
@@ -382,6 +397,35 @@
         });
 
         setTimeout(() => { updateProject(0); }, 200);
+
+        // Attempt soft autoplay with low volume when DOM loads
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var music = document.getElementById("bg-music");
+            music.volume = 0.4; // Set volume to a gentle 40%
+            var playPromise = music.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    document.getElementById("sound-toggle-btn").innerHTML = "🔊";
+                }).catch(error => {
+                    document.getElementById("sound-toggle-btn").innerHTML = "🔇";
+                });
+            }
+        });
+
+        // Toggle audio playback and update icon accordingly
+        function toggleSound() {
+            var music = document.getElementById("bg-music");
+            var btn = document.getElementById("sound-toggle-btn");
+            
+            if (music.paused) {
+                music.play();
+                btn.innerHTML = "🔊"; // Sound active icon
+            } else {
+                music.pause();
+                btn.innerHTML = "🔇"; // Muted icon
+            }
+        }
     </script>
 </body>
 </html>
